@@ -1,13 +1,5 @@
-$$$$$$$\   $$$$$$\  $$$$$$\ 
-$$  __$$\ $$  __$$\ \_$$  _|
-$$ |  $$ |$$ /  \__|  $$ |  
-$$$$$$$  |\$$$$$$\    $$ |  
-$$  ____/  \____$$\   $$ |  
-$$ |      $$\   $$ |  $$ |  
-$$ |      \$$$$$$  |$$$$$$\ 
-\__|       \______/ \______|
-                            
-                            
+<img width="301" height="255" alt="ascii-art-text" src="https://github.com/user-attachments/assets/11b15a2c-7907-4373-97ad-b95e2d606513" />
+  
                             
 # PSI_Grupo_E_2025_2026
 Plataforma de Gestão de Eventos de Saúde Pública
@@ -24,14 +16,4 @@ O projeto é uma junção de disciplinas de PLATSI (Plataformas de Sistemas de I
 
 O Projeto vai ser feito ao longo do semestre em JAVA script e PHP com a gestão feita no Jira.
 
-$$$$$$$\   $$$$$$\  $$$$$$\ 
-$$  __$$\ $$  __$$\ \_$$  _|
-$$ |  $$ |$$ /  \__|  $$ |  
-$$$$$$$  |\$$$$$$\    $$ |  
-$$  ____/  \____$$\   $$ |  
-$$ |      $$\   $$ |  $$ |  
-$$ |      \$$$$$$  |$$$$$$\ 
-\__|       \______/ \______|
-                            
-                            
-                            
+<img width="301" height="255" alt="ascii-art-text" src="https://github.com/user-attachments/assets/a4f2685d-34c2-4706-b2e0-458b1ec9b091" />
