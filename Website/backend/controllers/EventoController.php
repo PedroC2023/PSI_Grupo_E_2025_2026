@@ -24,12 +24,18 @@ class EventoController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['manageEvents'], // Permissão RBAC
+                        'actions' => ['index', 'view'],
+                        'roles' => ['@'], // qualquer utilizador autenticado
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['create', 'update', 'delete'],
+                        'roles' => ['manageEvents'], // só quem tem esta permissão
                     ],
                 ],
             ],
         ];
-    }   
+    }  
 
     /**
      * Lists all Evento models.

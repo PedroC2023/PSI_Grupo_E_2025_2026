@@ -10,6 +10,9 @@ class RbacController extends Controller
     public function actionInit()
     {
         $auth = Yii::$app->authManager;
+        $adminRole = $auth->getRole('admin');
+        $auth->assign($adminRole, 1); // 1 = ID do utilizador
+
 
         // Permissões
         $manageRoles = $auth->createPermission('manageRoles');
