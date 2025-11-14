@@ -12,6 +12,9 @@ return [
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager', // or PhpManager if you prefer
+        ],
         'request' => [
             'csrfParam' => '_csrf-frontend',
         ],
@@ -36,12 +39,15 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
+        
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                ['class' => 'yii\rest\UrlRule','controller' => 'api/user'],
             ],
         ],
+        
     ],
     'params' => $params,
 ];

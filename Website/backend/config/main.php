@@ -11,8 +11,15 @@ return [
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
-    'modules' => [],
-    'components' => [
+    'modules' => [
+        'api' => [
+            'class' => 'backend\modules\api\ModuleAPI',
+        ],
+    ],
+    'components' => [        
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager', // or PhpManager if you prefer
+        ],
         'request' => [
             'csrfParam' => '_csrf-backend',
         ],
@@ -37,12 +44,20 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
+        
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                // Regra para UserController
+                [
+                    'class' => 'yii\rest\UrlRule','controller' => 'api/user',
+                    'pluralize' => false
+                ],                
+//  <--------  usar ?access-token=qdXut46xKW-waAXTe-sLBgxfSAKex1W3 para testar - POST PUT DELETE GET - URLs  ---------->
+                // Regra para PratoController com extraPatterns                
             ],
-        ],
+        ],        
     ],
     'params' => $params,
 ];
