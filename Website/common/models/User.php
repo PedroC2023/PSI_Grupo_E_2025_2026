@@ -7,6 +7,7 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use yii\filters\auth\HttpBasicAuth;
 
 /**
  * User model
@@ -41,12 +42,26 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * {@inheritdoc}
      */
+    
     public function behaviors()
     {
-        return [
-            TimestampBehavior::class,
+        $behaviors = parent::behaviors();
+        $behaviors['authenticator'] = [
+            'class' => HttpBasicAuth::className(),
+            'auth' => [$this, 'auth'],
         ];
+        return $behaviors;
     }
+
+    public function auth($username, $password)
+    {
+        $user = \common\models\User::findByUsername($username);
+        if ($user && $user->validatePassword($password)) {
+            return $user;
+        }
+        throw new \yii\web\ForbiddenHttpException('No authentication');
+    }
+
 
     /**
      * {@inheritdoc}
@@ -72,7 +87,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
+        return static::findOne(['auth_key' => $token, 'status' => self::STATUS_ACTIVE]);
     }
 
     /**
