@@ -58,3 +58,4 @@ class RoleController extends Controller
         throw new NotFoundHttpException('User não encontrado.');
     }
 }
+
