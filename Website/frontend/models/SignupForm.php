@@ -55,9 +55,35 @@ class SignupForm extends Model
         $user->setPassword($this->password);
         $user->generateAuthKey();
         $user->generateEmailVerificationToken();
+        $user->status = User::STATUS_ACTIVE;
 
-        return $user->save() && $this->sendEmail($user);
+        if ($user->save()) {
+
+            // === RBAC: atribuir role padrão ===
+            $auth = Yii::$app->authManager;
+
+            // Escolhe o role padrão (muda para 'visitante' se quiseres)
+            $defaultRole = $auth->getRole('paciente');
+
+            if ($defaultRole) {
+                $auth->assign($defaultRole, $user->id);
+            }
+
+            // === Criar registo na tabela pessoa (se existir) ===
+            if (class_exists(\common\models\Pessoa::class)) {
+                $pessoa = new \common\models\Pessoa();
+                $pessoa->id_user = $user->id;
+                $pessoa->role = 'paciente'; // ou visitante, colaborador, conforme o teu sistema
+                $pessoa->save();
+            }
+
+            // === Enviar email de verificação ===
+            return $this->sendEmail($user);
+        }
+
+        return null;
     }
+
 
     /**
      * Sends confirmation email to user
