@@ -1,6 +1,6 @@
 <?php
 
-namespace app\controllers;
+namespace backend\controllers;
 
 use common\models\Pessoa;
 use yii\data\ActiveDataProvider;

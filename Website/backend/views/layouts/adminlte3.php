@@ -49,17 +49,17 @@ AdminLteAsset::register($this);
                 <ul class="nav nav-pills nav-sidebar flex-column">
 
                     <li class="nav-item">
-                        <a href="/backend/web/site/index" class="nav-link">
+                        <a href="/PSI_Grupo_E_2025_2026/Website/backend/web/site/index" class="nav-link">
                             <p>Dashboard</p>
                         </a>
                     </li>
-
+                    <!--
                     <li class="nav-item">
-                        <a href="/backend/web/pessoa/index" class="nav-link">
+                        <a href="/PSI_Grupo_E_2025_2026/Website/backend/web/pessoa/index" class="nav-link">
                             <p>Pessoas</p>
                         </a>
                     </li>
-
+                    -->
                     <li class="nav-item">
                         <a href="/PSI_Grupo_E_2025_2026/Website/backend/web/role/index" class="nav-link">
                             <p>Gestão de Roles</p>
