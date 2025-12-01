@@ -1,42 +1,35 @@
 <?php
 
-use common\models\Role;
-use yii\helpers\Html;
-use yii\helpers\Url;
-use yii\grid\ActionColumn;
 use yii\grid\GridView;
+use yii\helpers\Html;
 
-/** @var yii\web\View $this */
-/** @var yii\data\ActiveDataProvider $dataProvider */
-
-$this->title = 'Roles';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = "Gestão de Roles";
 ?>
-<div class="role-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+<h1><?= $this->title ?></h1>
 
-    <p>
-        <?= Html::a('Create Role', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'nome_role',
-            'descricao',
-            [
-                'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Role $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                 }
+<?= GridView::widget([
+    'dataProvider' => $dataProvider,
+    'columns' => [
+        'id',
+        'username',
+        'email',
+        [
+            'label' => 'Role Atual',
+            'value' => function($model) {
+                $roles = Yii::$app->authManager->getRolesByUser($model->id);
+                return count($roles) ? array_keys($roles)[0] : '(sem role)';
+            }
+        ],
+        [
+            'class' => 'yii\grid\ActionColumn',
+            'template' => '{update}',
+            'buttons' => [
+                'update' => function($url, $model) {
+                    return Html::a('Editar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']);
+                }
             ],
         ],
-    ]); ?>
+    ],
+]); ?>
 
-
-</div>

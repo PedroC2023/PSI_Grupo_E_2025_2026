@@ -57,7 +57,14 @@ return [
 //  <--------  usar ?access-token=qdXut46xKW-waAXTe-sLBgxfSAKex1W3 para testar - POST PUT DELETE GET - URLs  ---------->
                 // Regra para PratoController com extraPatterns                
             ],
+        ],
+        'assetManager' => [
+            'bundles' => [
+                'hail812\adminlte3\assets\AdminLteAsset' => [
+                ],
+            ],
         ],        
     ],
+    'layout' => 'adminlte3',
     'params' => $params,
 ];

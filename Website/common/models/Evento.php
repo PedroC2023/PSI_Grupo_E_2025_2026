@@ -66,5 +66,27 @@ class Evento extends \yii\db\ActiveRecord
             'endereco' => 'Endereco',
         ];
     }
+    // Proteger os controllers com RBAC
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => \yii\filters\AccessControl::class,
+                'rules' => [
+                    [
+                        'actions' => ['index', 'view'],
+                        'allow' => true,
+                        'roles' => ['viewEvents'],
+                    ],
+                    [
+                        'actions' => ['create', 'update', 'delete'],
+                        'allow' => true,
+                        'roles' => ['manageEvents'],
+                    ],
+                ],
+            ],
+        ];
+    }
+
 
 }

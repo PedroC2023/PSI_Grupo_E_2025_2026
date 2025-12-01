@@ -22,6 +22,17 @@ return [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-frontend', 'httpOnly' => true],
+            'on afterLogin' => function($event) {
+
+                $user = $event->identity;
+
+                // Se o user não tiver registo em pessoa
+                if (!$user->pessoa) {
+                    Yii::$app->response->redirect(['/pessoa/create'])->send();
+                    Yii::$app->end();
+                }
+            },
+
         ],
         'session' => [
             // this is the name of the session cookie used for login on the frontend

@@ -4,14 +4,14 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /** @var yii\web\View $this */
-/** @var common\models\Role $model */
+/** @var common\models\Pessoa $model */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Roles', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Pessoas', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
-<div class="role-view">
+<div class="pessoa-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -30,8 +30,17 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'nome_role',
-            'descricao',
+            'telefone',
+            'role',
+            'id_regiao',
+            'id_user',
+            'nome',
+            'n_identificacao_fiscal',
+            'morada',
+            'codigo_postal',
+            'n_seguranca_social',
+            'n_utente_saude',
+            'n_cartao_cidadao',
         ],
     ]) ?>
 

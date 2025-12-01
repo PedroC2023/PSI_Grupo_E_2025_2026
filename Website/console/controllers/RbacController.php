@@ -10,11 +10,13 @@ class RbacController extends Controller
     public function actionInit()
     {
         $auth = Yii::$app->authManager;
-        $adminRole = $auth->getRole('admin');
-        $auth->assign($adminRole, 1); // 1 = ID do utilizador
 
+        // Remove tudo para evitar duplicação
+        $auth->removeAll();
 
-        // Permissões
+        // ======================
+        // PERMISSÕES
+        // ======================
         $manageRoles = $auth->createPermission('manageRoles');
         $manageRoles->description = 'Gerir roles';
         $auth->add($manageRoles);
@@ -31,15 +33,21 @@ class RbacController extends Controller
         $participateEvents->description = 'Participar em eventos';
         $auth->add($participateEvents);
 
-        // Roles
+        // ======================
+        // ROLES
+        // ======================
         $admin = $auth->createRole('admin');
         $auth->add($admin);
         $auth->addChild($admin, $manageRoles);
         $auth->addChild($admin, $manageEvents);
+        $auth->addChild($admin, $viewEvents);
+        $auth->addChild($admin, $participateEvents);
 
         $colaborador = $auth->createRole('colaborador');
         $auth->add($colaborador);
         $auth->addChild($colaborador, $manageEvents);
+        $auth->addChild($colaborador, $viewEvents);
+        $auth->addChild($colaborador, $participateEvents);
 
         $paciente = $auth->createRole('paciente');
         $auth->add($paciente);
@@ -49,6 +57,11 @@ class RbacController extends Controller
         $visitante = $auth->createRole('visitante');
         $auth->add($visitante);
         $auth->addChild($visitante, $viewEvents);
+
+        // ======================
+        // ATRIBUIR ROLE A UM UTILIZADOR (ex: user 1 = admin)
+        // ======================
+        $auth->assign($admin, 1);
 
         echo "RBAC inicializado com sucesso!\n";
     }

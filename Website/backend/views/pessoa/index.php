@@ -1,6 +1,6 @@
 <?php
 
-use common\models\Utilizador;
+use common\models\Pessoa;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
@@ -9,15 +9,15 @@ use yii\grid\GridView;
 /** @var yii\web\View $this */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Utilizadors';
+$this->title = 'Pessoas';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="utilizador-index">
+<div class="pessoa-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Utilizador', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Pessoa', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
 
@@ -27,15 +27,20 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'nome',
-            'email:email',
-            'password_hash',
             'telefone',
-            //'data_registo',
-            //'id_role',
+            'role',
+            'id_regiao',
+            'id_user',
+            //'nome',
+            //'n_identificacao_fiscal',
+            //'morada',
+            //'codigo_postal',
+            //'n_seguranca_social',
+            //'n_utente_saude',
+            //'n_cartao_cidadao',
             [
                 'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Utilizador $model, $key, $index, $column) {
+                'urlCreator' => function ($action, Pessoa $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                  }
             ],
