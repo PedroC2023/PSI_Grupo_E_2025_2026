@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center_horizontal">
+
+
+    <!-- Cabeçalho: Botões e Mês -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="10dp">
+
+        <Button
+            android:id="@+id/btnAnterior"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="<"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tvMesAno"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Janeiro 2024"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textColor="@android:color/black"/>
+
+        <Button
+            android:id="@+id/btnProximo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=">"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+    <!-- Dias da semana (S T Q Q S S D) -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="7">
+        <TextView android:text="DOM" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:gravity="center"/>
+        <TextView android:text="SEG" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:gravity="center"/>
+        <TextView android:text="TER" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:gravity="center"/>
+        <TextView android:text="QUA" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:gravity="center"/>
+        <TextView android:text="QUI" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:gravity="center"/>
+        <TextView android:text="SEX" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:gravity="center"/>
+        <TextView android:text="SAB" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:gravity="center"/>
+    </LinearLayout>
+
+    <!-- A grade de dias -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/calendarRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"/>
+
+</LinearLayout>
