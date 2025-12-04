@@ -1,4 +1,4 @@
-<h1 class="mb-4">Área do Paciente</h1>
+    <h1 class="mb-4">Área do Paciente</h1>
 
 <div class="card p-4 shadow">
     <h3>Eventos Disponíveis</h3>
