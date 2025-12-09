@@ -1,0 +1,176 @@
+:root{
+    --accent1: #7b2ff7;
+    --accent2: #ff7eb3;
+    --card-bg: rgba(255,255,255,0.06);
+    --glass: rgba(255,255,255,0.06);
+    --muted: #cfd8dc;
+}
+
+/* Page layout */
+.signup-page{
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    color: #ffffff;
+    min-height: 100vh;
+    background: linear-gradient(180deg, #0f172a 0%, #071028 60%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Header */
+.signup-header{
+    width: 100%;
+    padding: 48px 20px;
+    background: linear-gradient(90deg, var(--accent1), var(--accent2));
+    box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+    clip-path: polygon(0 0, 100% 0, 100% 78%, 0 100%);
+}
+.signup-header .header-content{
+    max-width: 880px;
+    margin: 0 auto;
+    text-align: left;
+}
+.signup-header h1{
+    margin: 0;
+    font-size: 34px;
+    letter-spacing: -0.5px;
+    text-shadow: 0 6px 30px rgba(123,47,247,0.25);
+}
+.signup-header .subtitle{
+    margin-top: 6px;
+    color: rgba(255,255,255,0.92);
+    opacity: 0.95;
+}
+
+/* Card */
+.signup-card{
+    width: 100%;
+    max-width: 880px;
+    margin-top: -48px;
+    padding: 32px;
+    display: flex;
+    justify-content: center;
+}
+.form-wrap{
+    width: 420px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+    border-radius: 14px;
+    padding: 28px;
+    box-shadow: 0 10px 40px rgba(2,6,23,0.6);
+    border: 1px solid rgba(255,255,255,0.04);
+}
+/* Inputs */
+.form-wrap .form-control{
+    background: rgba(255,255,255,0.02);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.06);
+    height: 46px;
+    padding: 10px 12px;
+    transition: all .22s ease;
+    border-radius: 8px;
+    box-shadow: inset 0 -4px 10px rgba(0,0,0,0.25);
+}
+.form-wrap .form-control::placeholder{
+    color: rgba(255,255,255,0.45);
+}
+.form-wrap .form-group{
+    margin-bottom: 14px;
+}
+.form-wrap .form-control:focus{
+    outline: none;
+    transform: translateY(-2px);
+    border-color: rgba(255,255,255,0.16);
+    box-shadow: 0 8px 30px rgba(123,47,247,0.12);
+}
+/* Password strength */
+.password-strength{
+    margin: 8px 0 14px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--muted);
+}
+.password-strength .strength-bar{
+    flex: 1;
+    height: 8px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+}
+.password-strength .strength-bar::after{
+    content: "";
+    display: block;
+    width: 0;
+    height: 100%;
+    background: #ff4d4f;
+    transition: width .25s ease, background .25s ease;
+}
+.password-strength .strength-bar{
+    background: rgba(255,255,255,0.06);
+}
+password-strength .strength-bar { position: relative; }
+#password-strength .strength-bar { background: rgba(255,255,255,0.04); }
+#password-strength .strength-bar { overflow: hidden; }
+#password-strength .strength-bar::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 0%;
+    transition: width .22s ease, background .22s ease;
+    background: #ff4d4f;
+    border-radius: 6px;
+}
+#password-strength .strength-bar[style]::before {
+
+}
+
+/* Terms */
+.form-check.terms{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color: rgba(255,255,255,0.8);
+    font-size: 13px;
+    margin-bottom: 16px;
+}
+.form-check input[type="checkbox"]{
+    width:18px;
+    height:18px;
+    accent-color: var(--accent1);
+}
+/* Button */
+.btn-signup{
+    width:100%;
+    height:46px;
+    border-radius: 10px;
+    border: none;
+    color: #0b1020;
+    font-weight: 600;
+    background: linear-gradient(90deg, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.92) 100%);
+    transition: transform .18s ease, box-shadow .18s ease, background .22s ease;
+    cursor: pointer;
+    opacity: 0.9;
+}
+.btn-signup:disabled{
+    filter: grayscale(0.8) brightness(0.8);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+.btn-signup.enabled{
+    background: linear-gradient(90deg, var(--accent1), var(--accent2));
+    color: #fff;
+    box-shadow: 0 10px 30px rgba(123,47,247,0.22);
+    transform: translateY(-3px);
+}
+.btn-signup.enabled:hover{
+    transform: translateY(-5px) scale(1.01);
+    box-shadow: 0 16px 40px rgba(123,47,247,0.32);
+}
+/* small responsive tweaks */
+@media (max-width: 600px){
+    .form-wrap{ width: calc(100% - 48px); padding: 20px; }
+    .signup-header h1{ font-size: 22px; text-align: center; }
+    .signup-header .header-content{ text-align: center; }
+}

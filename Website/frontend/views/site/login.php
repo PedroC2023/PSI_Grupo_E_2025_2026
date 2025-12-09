@@ -26,8 +26,8 @@ $this->registerCssFile(Yii::getAlias('@web') . '/css/login.css', [
                 </div>
             </div>
 
-            <h2>Welcome back</h2>
-            <p>Enter your credentials to access the platform. If you don't have an account, contact the administrator.</p>
+            <h2>Bem vindo(a)!</h2>
+            <p>Se ja tiver uma conta criada connosco, faça login.</p>
 
             <div style="margin-top:auto; width:100%;">
                 <div class="divider">Secure login</div>
