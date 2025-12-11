@@ -13,10 +13,11 @@ class PacienteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
+                'only' => ['index', 'eventos', 'participacao'],
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['paciente'], // só pacientes
+                        'roles' => ['paciente'],
                     ],
                 ],
             ],
@@ -28,13 +29,14 @@ class PacienteController extends Controller
         return $this->render('index');
     }
 
-    public function actionView($id)
+    public function actionEventos()
     {
-        return $this->render('view');
+        return $this->render('eventos');
     }
 
-    public function actionParticipar($id)
+    public function actionParticipacao()
     {
-        return $this->render('participar');
+        return $this->render('participacao');
     }
 }
+

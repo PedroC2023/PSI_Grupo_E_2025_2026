@@ -99,5 +99,80 @@ class RbacController extends Controller
         Yii::$app->session->setFlash('success', 'Utilizador eliminado com sucesso.');
         return $this->redirect(['index']);
     }
+
+    public function actionRoles()
+    {
+        $auth = Yii::$app->authManager;
+        $roles = $auth->getRoles();
+
+        return $this->render('roles', [
+            'roles' => $roles
+        ]);
+    }
+
+    public function actionCreateRole()
+    {
+        if (Yii::$app->request->isPost) {
+            $name = Yii::$app->request->post('name');
+            $description = Yii::$app->request->post('description');
+
+            $auth = Yii::$app->authManager;
+
+            if ($auth->getRole($name)) {
+                Yii::$app->session->setFlash('error', 'Já existe um role com este nome.');
+            } else {
+                $role = $auth->createRole($name);
+                $role->description = $description;
+                $auth->add($role);
+                Yii::$app->session->setFlash('success', 'Role criado com sucesso.');
+            }
+
+            return $this->redirect(['roles']);
+        }
+
+        return $this->render('create-role');
+    }
+
+    public function actionUpdateRole($name)
+    {
+        $auth = Yii::$app->authManager;
+        $role = $auth->getRole($name);
+
+        if (!$role) {
+            throw new NotFoundHttpException('Role não encontrado.');
+        }
+
+        if (Yii::$app->request->isPost) {
+            $newDescription = Yii::$app->request->post('description');
+            $role->description = $newDescription;
+            $auth->update($name, $role);
+
+            Yii::$app->session->setFlash('success', 'Role atualizado com sucesso.');
+            return $this->redirect(['roles']);
+        }
+
+        return $this->render('update-role', [
+            'role' => $role,
+        ]);
+    }
+
+    public function actionDeleteRole($name)
+    {
+        $auth = Yii::$app->authManager;
+        $role = $auth->getRole($name);
+
+        if (!$role) {
+            throw new NotFoundHttpException('Role não encontrado.');
+        }
+
+        $auth->remove($role);
+
+        Yii::$app->session->setFlash('success', 'Role eliminado com sucesso.');
+        return $this->redirect(['roles']);
+    }
+
+
+
+
 }
 

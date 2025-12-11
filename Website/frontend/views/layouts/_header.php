@@ -29,13 +29,13 @@ $auth = Yii::$app->authManager;
 
                 <?php if ($isLogged && $auth->checkAccess($userId, 'paciente')): ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= Url::to(['/paciente/index']) ?>">Área do Paciente</a>
+                        <a class="nav-link" href="<?= Url::to(['/participacao/index']) ?>">Área do Paciente</a>
                     </li>
                 <?php endif; ?>
 
                 <?php if ($isLogged && $auth->checkAccess($userId, 'colaborador')): ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= Url::to(['/colaborador/eventos']) ?>">Eventos</a>
+                        <a class="nav-link" href="<?= Url::to(['/evento/index']) ?>">Eventos</a>
                     </li>
                 <?php endif; ?>
 
