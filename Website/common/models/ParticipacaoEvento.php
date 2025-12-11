@@ -1,5 +1,4 @@
 <?php
-
 namespace common\models;
 
 use Yii;
@@ -9,47 +8,50 @@ use Yii;
  *
  * @property int $id
  * @property int $id_evento
- * @property int $id_utilizador
- * @property int $data_participacao
- * @property int $status_participacao
+ * @property int $id_pessoa
+ * @property string $data_participacao
+ * @property string $status_participacao
  */
 class ParticipacaoEvento extends \yii\db\ActiveRecord
 {
-
-
-    /**
-     * {@inheritdoc}
-     */
     public static function tableName()
     {
         return 'participacao_evento';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function rules()
     {
         return [
-            [['id_evento', 'id_utilizador', 'data_participacao', 'status_participacao'], 'required'],
-            [['id_evento', 'id_utilizador', 'data_participacao', 'status_participacao'], 'integer'],
-            [['id_evento'], 'unique'],
-            [['id_utilizador'], 'unique'],
+            [['id_evento', 'id_pessoa'], 'required'],
+            [['id_evento', 'id_pessoa'], 'integer'],
+            [['data_participacao'], 'safe'],
+            [['status_participacao'], 'string', 'max' => 50],
+            // evitar duplicados: um mesmo utilizador não pode inscrever-se duas vezes num mesmo evento
+            [['id_evento', 'id_pessoa'], 'unique', 'targetAttribute' => ['id_evento', 'id_pessoa'], 'message' => 'Já estás inscrito neste evento.'],
+            // FK exist checks (opcionais)
+            [['id_evento'], 'exist', 'skipOnError' => true, 'targetClass' => Evento::class, 'targetAttribute' => ['id_evento' => 'id']],
+            [['id_pessoa'], 'exist', 'skipOnError' => true, 'targetClass' => Pessoa::class, 'targetAttribute' => ['id_pessoa' => 'id']],
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function attributeLabels()
     {
         return [
             'id' => 'ID',
-            'id_evento' => 'Id Evento',
-            'id_utilizador' => 'Id Utilizador',
-            'data_participacao' => 'Data Participacao',
-            'status_participacao' => 'Status Participacao',
+            'id_evento' => 'Evento',
+            'id_pessoa' => 'Pessoa',
+            'data_participacao' => 'Data Participação',
+            'status_participacao' => 'Estado',
         ];
     }
 
+    public function getEvento()
+    {
+        return $this->hasOne(Evento::class, ['id' => 'id_evento']);
+    }
+
+    public function getPessoa()
+    {
+        return $this->hasOne(Pessoa::class, ['id' => 'id_pessoa']);
+    }
 }

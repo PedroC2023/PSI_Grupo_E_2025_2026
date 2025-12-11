@@ -36,5 +36,20 @@ $this->params['breadcrumbs'][] = $this->title;
             'status_participacao',
         ],
     ]) ?>
+    <p><b>Data:</b> <?= $evento->data_inicio ?> até <?= $evento->data_fim ?></p>
+    <p><b>Local:</b> <?= $evento->cidade ?>, <?= $evento->regiao ?>, <?= $evento->pais ?></p>
+    <p><strong>Localização:</strong><br>
+        <?= $model->endereco ?>,<br>
+        <?= $model->cidade ?> – <?= $model->regiao ?>,<br>
+        <?= $model->pais ?>
+    </p>
+
+    <?php if (Yii::$app->user->can('participateEvents')): ?>
+    <?= Html::a('Inscrever', ['/participacao/inscrever', 'id' => $model->id], [
+        'class' => 'btn btn-primary',
+        'data-method' => 'post'
+    ]) ?>
+    <?php endif; ?>
+
 
 </div>

@@ -13,14 +13,20 @@ class ColaboradorController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
+                'only' => ['index', 'eventos', 'participantes', 'editar-evento'],
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['colaborador'], // só colaboradores
+                        'roles' => ['colaborador'],
                     ],
                 ],
             ],
         ];
+    }
+
+    public function actionIndex()
+    {
+        return $this->render('index');
     }
 
     public function actionEventos()
@@ -28,13 +34,13 @@ class ColaboradorController extends Controller
         return $this->render('eventos');
     }
 
-    public function actionParticipantes($id)
+    public function actionParticipantes()
     {
         return $this->render('participantes');
     }
 
-    public function actionEditar($id)
+    public function actionEditarEvento()
     {
-        return $this->render('editar');
+        return $this->render('editar-evento');
     }
 }

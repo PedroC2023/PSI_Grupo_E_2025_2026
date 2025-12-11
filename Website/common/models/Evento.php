@@ -20,73 +20,71 @@ use Yii;
  * @property string $cidade
  * @property string $endereco
  */
+namespace common\models;
+
+use Yii;
+
 class Evento extends \yii\db\ActiveRecord
 {
-
-
-    /**
-     * {@inheritdoc}
-     */
+    
     public static function tableName()
     {
         return 'evento';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function rules()
     {
         return [
-            [['titulo', 'descricao', 'data_inicio', 'data_fim', 'tipo_evento', 'status', 'id_utilizador', 'pais', 'regiao', 'cidade', 'endereco'], 'required'],
+            [['titulo', 'descricao', 'data_inicio', 'data_fim', 'tipo_evento',
+              'pais', 'regiao', 'cidade', 'endereco'], 'required'],
+            ['status', 'in', 'range' => ['aberto', 'fechado']],
+
             [['data_inicio', 'data_fim'], 'safe'],
-            [['id_utilizador'], 'integer'],
-            [['titulo', 'descricao', 'tipo_evento', 'status', 'pais', 'regiao', 'cidade', 'endereco'], 'string', 'max' => 256],
-            [['id_utilizador'], 'unique'],
+            [['titulo', 'descricao', 'tipo_evento', 'status',
+              'pais', 'regiao', 'cidade', 'endereco'], 'string', 'max' => 256],
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function attributeLabels()
     {
         return [
             'id' => 'ID',
-            'titulo' => 'Titulo',
-            'descricao' => 'Descricao',
-            'data_inicio' => 'Data Inicio',
-            'data_fim' => 'Data Fim',
-            'tipo_evento' => 'Tipo Evento',
-            'status' => 'Status',
-            'id_utilizador' => 'Id Utilizador',
-            'pais' => 'Pais',
-            'regiao' => 'Regiao',
+            'titulo' => 'Título',
+            'descricao' => 'Descrição',
+            [['titulo','data_inicio','data_fim','tipo_evento','status'], 'required'],
+            [['data_inicio','data_fim'], 'safe'],
+            ['data_inicio', 'compare', 'compareAttribute' => 'data_fim', 'operator' => '<', 'type' => 'datetime', 'message' => 'A data de início deve ser anterior à data de fim.'],
+            'tipo_evento' => 'Tipo',
+            'status' => 'Estado',
+            'pais' => 'País',
+            'regiao' => 'Região',
             'cidade' => 'Cidade',
-            'endereco' => 'Endereco',
+            'endereco' => 'Endereço',
         ];
     }
-    // Proteger os controllers com RBAC
-    public function behaviors()
+
+    public function isExpired()
     {
-        return [
-            'access' => [
-                'class' => \yii\filters\AccessControl::class,
-                'rules' => [
-                    [
-                        'actions' => ['index', 'view'],
-                        'allow' => true,
-                        'roles' => ['viewEvents'],
-                    ],
-                    [
-                        'actions' => ['create', 'update', 'delete'],
-                        'allow' => true,
-                        'roles' => ['manageEvents'],
-                    ],
-                ],
-            ],
-        ];
+        return strtotime($this->data_fim) < time();
+    }
+
+    public function updateStatusIfNeeded()
+    {
+        if ($this->isExpired() && $this->status !== 'fechado') {
+            $this->status = 'fechado';
+            $this->save(false, ['status']);
+        }
     }
 
 
+    public function getParticipacoes()
+    {
+        return $this->hasMany(ParticipacaoEvento::class, ['id_evento' => 'id']);
+    }
+
+    public function getColaboradores()
+    {
+        return $this->hasMany(ColaboracaoEvento::class, ['id_evento' => 'id']);
+    }
 }
+
