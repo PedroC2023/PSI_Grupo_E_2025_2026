@@ -42,6 +42,20 @@ class EventoController extends Controller
         ];
     }
 
+    // listar participantes de um evento (colaborador)
+    public function actionParticipantes($id)
+    {
+        $evento = Evento::findOne($id);
+        if (!$evento) {
+            throw new NotFoundHttpException();
+        }
+
+        return $this->render('participantes', [
+            'evento' => $evento,
+            'participacoes' => $evento->participacoes,
+        ]);
+    }
+
     public function actionIndex()
     {
         $eventos = Evento::find()->all();
@@ -95,70 +109,51 @@ class EventoController extends Controller
     public function actionParticipar($id)
     {
         $userId = Yii::$app->user->id;
+
         if (!$userId) {
-            Yii::$app->session->setFlash('error', 'Precisas de fazer login para te inscrever.');
-            return $this->redirect(['view', 'id' => $id]);
+            throw new ForbiddenHttpException();
         }
 
-        // encontrar a pessoa associada ao user
         $pessoa = \common\models\Pessoa::findOne(['id_user' => $userId]);
-        if (!$pessoa) {
-            Yii::$app->session->setFlash('error', 'Registo de pessoa não encontrado. Completa o teu perfil.');
-            return $this->redirect(['view', 'id' => $id]);
+        if (!$pessoa || $pessoa->role !== 'paciente') {
+            throw new ForbiddenHttpException('Apenas pacientes podem inscrever-se.');
         }
 
-        // evento existe?
-        $evento = \common\models\Evento::findOne($id);
+        $evento = Evento::findOne($id);
         if (!$evento) {
-            Yii::$app->session->setFlash('error', 'Evento não encontrado.');
-            return $this->redirect(['index']);
+            throw new NotFoundHttpException();
         }
 
-        // verificar datas: só permitir inscrição antes do inicio (ou conforme regra)
-        $now = new \DateTime('now');
-        $inicio = new \DateTime($evento->data_inicio);
-        $fim = $evento->data_fim ? new \DateTime($evento->data_fim) : null;
-
-        if ($fim && $now > $fim) {
-            Yii::$app->session->setFlash('error', 'Evento já terminou, não é possível inscrever.');
-            return $this->redirect(['view', 'id' => $id]);
-        }
-        if ($now > $inicio) {
-            Yii::$app->session->setFlash('error', 'O evento já iniciou — inscrições encerradas.');
+        // impedir inscrições após início/fim
+        $now = new \DateTime();
+        if ($now > new \DateTime($evento->data_inicio)) {
+            Yii::$app->session->setFlash('error', 'Inscrições encerradas.');
             return $this->redirect(['view', 'id' => $id]);
         }
 
-        // verificar capacidade (se tens campo capacidade no evento)
-        if (isset($evento->capacidade)) {
-            $count = \common\models\ParticipacaoEvento::find()
-                ->where(['id_evento' => $id, 'status_participacao' => 'inscrito'])
-                ->count();
-            if ($count >= (int)$evento->capacidade) {
-                Yii::$app->session->setFlash('error', 'Capacidade esgotada.');
-                return $this->redirect(['view', 'id' => $id]);
-            }
-        }
+        // verificar duplicado (CORRETO)
+        $exists = ParticipacaoEvento::find()
+            ->where([
+                'id_evento' => $id,
+                'id_utilizador' => $userId
+            ])->one();
 
-        // verificar inscrição duplicada
-        $exists = \common\models\ParticipacaoEvento::find()
-            ->where(['id_evento' => $id, 'id_pessoa' => $pessoa->id])
-            ->one();
         if ($exists) {
-            Yii::$app->session->setFlash('info', 'Já estás inscrito neste evento.');
+            Yii::$app->session->setFlash('info', 'Já estás inscrito.');
             return $this->redirect(['view', 'id' => $id]);
         }
 
         // criar participação
-        $model = new \common\models\ParticipacaoEvento();
+        $model = new ParticipacaoEvento();
         $model->id_evento = $id;
-        $model->id_pessoa = $pessoa->id;
+        $model->id_utilizador = $userId;
         $model->data_participacao = date('Y-m-d H:i:s');
         $model->status_participacao = 'inscrito';
 
         if ($model->save()) {
-            Yii::$app->session->setFlash('success', 'Inscrição realizada com sucesso.');
+            Yii::$app->session->setFlash('success', 'Inscrição realizada.');
         } else {
-            Yii::$app->session->setFlash('error', 'Erro ao inscrever: ' . implode('; ', $model->getFirstErrors()));
+            Yii::$app->session->setFlash('error', implode(', ', $model->getFirstErrors()));
         }
 
         return $this->redirect(['view', 'id' => $id]);
