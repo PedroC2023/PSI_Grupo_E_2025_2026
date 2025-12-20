@@ -4,29 +4,8 @@ namespace common\models;
 
 use Yii;
 
-/**
- * This is the model class for table "evento".
- *
- * @property int $id
- * @property string $titulo
- * @property string $descricao
- * @property string $data_inicio
- * @property string $data_fim
- * @property string $tipo_evento
- * @property string $status
- * @property int $id_utilizador
- * @property string $pais
- * @property string $regiao
- * @property string $cidade
- * @property string $endereco
- */
-namespace common\models;
-
-use Yii;
-
 class Evento extends \yii\db\ActiveRecord
 {
-    
     public static function tableName()
     {
         return 'evento';
@@ -35,13 +14,36 @@ class Evento extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['titulo', 'descricao', 'data_inicio', 'data_fim', 'tipo_evento',
-              'pais', 'regiao', 'cidade', 'endereco'], 'required'],
-            ['status', 'in', 'range' => ['aberto', 'fechado']],
+            [
+                ['titulo', 'descricao', 'data_inicio', 'data_fim', 'tipo_evento',
+                 'status', 'pais', 'regiao', 'cidade', 'endereco'],
+                'required'
+            ],
 
             [['data_inicio', 'data_fim'], 'safe'],
+
+            [
+                'data_inicio',
+                'compare',
+                'compareAttribute' => 'data_fim',
+                'operator' => '<',
+                'type' => 'datetime',
+                'message' => 'A data de início deve ser anterior à data de fim.'
+            ],
+
             [['titulo', 'descricao', 'tipo_evento', 'status',
               'pais', 'regiao', 'cidade', 'endereco'], 'string', 'max' => 256],
+
+            ['status', 'in', 'range' => ['aberto', 'fechado']],
+
+            // quem criou o evento (colaborador)
+            [['id_utilizador'], 'integer'],
+            [['id_utilizador'], 'required'],
+            [['id_utilizador'], 'exist',
+                'skipOnError' => true,
+                'targetClass' => User::class,
+                'targetAttribute' => ['id_utilizador' => 'id']
+            ],
         ];
     }
 
@@ -51,10 +53,9 @@ class Evento extends \yii\db\ActiveRecord
             'id' => 'ID',
             'titulo' => 'Título',
             'descricao' => 'Descrição',
-            [['titulo','data_inicio','data_fim','tipo_evento','status'], 'required'],
-            [['data_inicio','data_fim'], 'safe'],
-            ['data_inicio', 'compare', 'compareAttribute' => 'data_fim', 'operator' => '<', 'type' => 'datetime', 'message' => 'A data de início deve ser anterior à data de fim.'],
-            'tipo_evento' => 'Tipo',
+            'data_inicio' => 'Data Início',
+            'data_fim' => 'Data Fim',
+            'tipo_evento' => 'Tipo de Evento',
             'status' => 'Estado',
             'pais' => 'País',
             'regiao' => 'Região',
@@ -62,6 +63,8 @@ class Evento extends \yii\db\ActiveRecord
             'endereco' => 'Endereço',
         ];
     }
+
+    // ================== LÓGICA ==================
 
     public function isExpired()
     {
@@ -76,15 +79,16 @@ class Evento extends \yii\db\ActiveRecord
         }
     }
 
+    // ================== RELAÇÕES ==================
 
     public function getParticipacoes()
     {
         return $this->hasMany(ParticipacaoEvento::class, ['id_evento' => 'id']);
     }
 
-    public function getColaboradores()
+    public function getCriador()
     {
-        return $this->hasMany(ColaboracaoEvento::class, ['id_evento' => 'id']);
+        return $this->hasOne(User::class, ['id' => 'id_utilizador']);
     }
 }
-
+?>

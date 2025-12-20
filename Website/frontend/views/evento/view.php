@@ -14,11 +14,6 @@ use yii\helpers\Html;
 <p><strong>Início:</strong> <?= $model->data_inicio ?></p>
 <p><strong>Fim:</strong> <?= $model->data_fim ?></p>
 
-<?php if (Yii::$app->user->can('participateEvents')): ?>
-    <?= Html::a("Participar", ['participar', 'id' => $model->id], 
-        ['class' => 'btn btn-success']) ?>
-<?php endif; ?>
-
 <?php if (Yii::$app->user->can('manageEvents')): ?>
     <?= Html::a("Editar", ['update', 'id' => $model->id], ['class' => 'btn btn-warning']) ?>
     <?= Html::a("Eliminar", ['delete', 'id' => $model->id], [

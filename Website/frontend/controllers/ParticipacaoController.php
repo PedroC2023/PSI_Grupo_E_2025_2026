@@ -5,8 +5,10 @@ namespace frontend\controllers;
 use Yii;
 use yii\web\Controller;
 use yii\filters\AccessControl;
+use yii\web\ForbiddenHttpException;
 use common\models\Evento;
 use common\models\ParticipacaoEvento;
+use common\models\Pessoa;
 
 class ParticipacaoController extends Controller
 {
@@ -15,30 +17,46 @@ class ParticipacaoController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['index', 'inscrever'],
+                'only' => ['index', 'inscrever', 'meus-eventos'],
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['paciente'], // só pacientes
+                        'roles' => ['paciente'], // RBAC
                     ],
                 ],
             ],
         ];
     }
 
-    // Lista eventos ativos para o paciente
+    // ===============================
+    // Eventos em que o paciente está inscrito
+    // ===============================
+    public function actionMeusEventos()
+    {
+        $userId = Yii::$app->user->id;
+
+        $participacoes = ParticipacaoEvento::find()
+            ->where(['id_utilizador' => $userId])
+            ->with('evento')
+            ->all();
+
+        return $this->render('meus-eventos', [
+            'participacoes' => $participacoes,
+        ]);
+    }
+
+    // ===============================
+    // Lista de eventos disponíveis
+    // ===============================
     public function actionIndex()
     {
-        $eventos = Evento::find()
-        ->orderBy(['data_inicio' => SORT_ASC])
-        ->all();
-
-        // Atualizar status automaticamente
+        // Atualizar estados automaticamente
+        $eventos = Evento::find()->all();
         foreach ($eventos as $evento) {
             $evento->updateStatusIfNeeded();
         }
 
-        // Mostrar apenas eventos abertos para pacientes
+        // Mostrar apenas eventos abertos
         $eventos = Evento::find()
             ->where(['status' => 'aberto'])
             ->orderBy(['data_inicio' => SORT_ASC])
@@ -49,31 +67,37 @@ class ParticipacaoController extends Controller
         ]);
     }
 
-    // Paciente inscreve-se num evento
+    // ===============================
+    // Inscrição do paciente num evento
+    // ===============================
     public function actionInscrever($id)
     {
-        $pessoa = Yii::$app->user->identity->pessoa;
-        if (!$pessoa) {
-            Yii::$app->session->setFlash('error', 'Dados pessoais não encontrados.');
-            return $this->redirect(['index']);
+        $userId = Yii::$app->user->id;
+
+        $pessoa = Pessoa::findOne(['id_user' => $userId]);
+        if (!$pessoa || $pessoa->role !== Pessoa::ROLE_PACIENTE) {
+            throw new ForbiddenHttpException('Apenas pacientes podem inscrever-se.');
         }
 
-        // Impedir duplicada
-        if (ParticipacaoEvento::findOne(['id_evento' => $id, 'id_pessoa' => $pessoa->id])) {
+        // Evitar inscrição duplicada (CORRETO)
+        if (ParticipacaoEvento::findOne([
+            'id_evento' => $id,
+            'id_utilizador' => $userId
+        ])) {
             Yii::$app->session->setFlash('warning', 'Já estás inscrito neste evento.');
             return $this->redirect(['index']);
         }
 
         $participacao = new ParticipacaoEvento();
         $participacao->id_evento = $id;
-        $participacao->id_pessoa = $pessoa->id;
-        $participacao->data_participacao = date('Y-m-d');
-        $participacao->status_participacao = 'pendente';
+        $participacao->id_utilizador = $userId;
+        $participacao->data_participacao = date('Y-m-d H:i:s');
+        $participacao->status_participacao = 'inscrito';
 
         if ($participacao->save()) {
             Yii::$app->session->setFlash('success', 'Inscrição realizada com sucesso!');
         } else {
-            Yii::$app->session->setFlash('error', 'Erro ao inscrever.');
+            Yii::$app->session->setFlash('error', implode(', ', $participacao->getFirstErrors()));
         }
 
         return $this->redirect(['index']);

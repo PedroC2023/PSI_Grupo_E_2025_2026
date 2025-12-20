@@ -21,6 +21,9 @@ use yii\helpers\Html;
             <td><?= $evento->data_inicio ?></td>
             <td>
                 <?= Html::a("Ver", ['view', 'id' => $evento->id], ['class' => 'btn btn-primary btn-sm']) ?>
+                <?php if (Yii::$app->user->can('manageEvents')) ?>
+                    <?= Html::a("Ver Participantes", ['evento/participantes', 'id' => $evento->id], 
+                    ['class' => 'btn btn-info btn-sm']); ?>
             </td>
         </tr>
     <?php endforeach; ?>

@@ -51,6 +51,12 @@ if ($isLogged && isset(Yii::$app->user->identity->avatar) && Yii::$app->user->id
                     </li>
                 <?php endif; ?>
 
+                <?php if ($isLogged && $auth->checkAccess($userId, 'paciente')): ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= Url::to(['/participacao/meus-eventos']) ?>">Meus Eventos</a>
+                    </li>
+                <?php endif; ?>
+
                 <?php if (!$isLogged): ?>
 
                     <li class="nav-item">

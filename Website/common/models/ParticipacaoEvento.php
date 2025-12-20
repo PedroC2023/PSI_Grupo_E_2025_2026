@@ -3,15 +3,6 @@ namespace common\models;
 
 use Yii;
 
-/**
- * This is the model class for table "participacao_evento".
- *
- * @property int $id
- * @property int $id_evento
- * @property int $id_pessoa
- * @property string $data_participacao
- * @property string $status_participacao
- */
 class ParticipacaoEvento extends \yii\db\ActiveRecord
 {
     public static function tableName()
@@ -22,15 +13,30 @@ class ParticipacaoEvento extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_evento', 'id_pessoa'], 'required'],
-            [['id_evento', 'id_pessoa'], 'integer'],
+            [['id_evento', 'id_utilizador'], 'required'],
+            [['id_evento', 'id_utilizador'], 'integer'],
             [['data_participacao'], 'safe'],
             [['status_participacao'], 'string', 'max' => 50],
-            // evitar duplicados: um mesmo utilizador não pode inscrever-se duas vezes num mesmo evento
-            [['id_evento', 'id_pessoa'], 'unique', 'targetAttribute' => ['id_evento', 'id_pessoa'], 'message' => 'Já estás inscrito neste evento.'],
-            // FK exist checks (opcionais)
-            [['id_evento'], 'exist', 'skipOnError' => true, 'targetClass' => Evento::class, 'targetAttribute' => ['id_evento' => 'id']],
-            [['id_pessoa'], 'exist', 'skipOnError' => true, 'targetClass' => Pessoa::class, 'targetAttribute' => ['id_pessoa' => 'id']],
+
+            // evitar inscrições duplicadas
+            [['id_evento', 'id_utilizador'], 'unique',
+                'targetAttribute' => ['id_evento', 'id_utilizador'],
+                'message' => 'Já estás inscrito neste evento.'
+            ],
+
+            // FK correta → EVENTO
+            [['id_evento'], 'exist',
+                'skipOnError' => true,
+                'targetClass' => Evento::class,
+                'targetAttribute' => ['id_evento' => 'id']
+            ],
+
+            // FK correta → USER (NÃO Pessoa)
+            [['id_utilizador'], 'exist',
+                'skipOnError' => true,
+                'targetClass' => User::class,
+                'targetAttribute' => ['id_utilizador' => 'id']
+            ],
         ];
     }
 
@@ -39,19 +45,26 @@ class ParticipacaoEvento extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'id_evento' => 'Evento',
-            'id_pessoa' => 'Pessoa',
+            'id_utilizador' => 'Utilizador',
             'data_participacao' => 'Data Participação',
             'status_participacao' => 'Estado',
         ];
     }
+
+    // ================= RELAÇÕES =================
 
     public function getEvento()
     {
         return $this->hasOne(Evento::class, ['id' => 'id_evento']);
     }
 
+    public function getUser()
+    {
+        return $this->hasOne(User::class, ['id' => 'id_utilizador']);
+    }
+
     public function getPessoa()
     {
-        return $this->hasOne(Pessoa::class, ['id' => 'id_pessoa']);
+        return $this->hasOne(Pessoa::class, ['id_user' => 'id_utilizador']);
     }
 }
