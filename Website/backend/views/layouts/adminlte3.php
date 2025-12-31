@@ -67,6 +67,18 @@ AdminLteAsset::register($this);
                         </a>
                     </li>
 
+                    <li class="nav-item">
+                        <a href="/PSI_Grupo_E_2025_2026/Website/backend/web/laboratorio/index" class="nav-link">
+                            <p>Laboratórios</p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="/PSI_Grupo_E_2025_2026/Website/backend/web/tipo-acao/index" class="nav-link">
+                            <p>Tipo de Ações</p>
+                        </a>
+                    </li>
+
 
                 </ul>
             </nav>
