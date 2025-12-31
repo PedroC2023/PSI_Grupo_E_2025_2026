@@ -39,23 +39,44 @@ if ($isLogged && isset(Yii::$app->user->identity->avatar) && Yii::$app->user->id
                     <a class="nav-link" href="<?= Url::to(['/site/index']) ?>">Home</a>
                 </li>
 
-                <?php if ($isLogged && $auth->checkAccess($userId, 'paciente')): ?>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= Url::to(['/participacao/index']) ?>">Área do Paciente</a>
-                    </li>
+                <?php if (!Yii::$app->user->isGuest): ?>
+
+                    <!-- ÁREA DO PACIENTE -->
+                    <?php if (Yii::$app->user->can('participateEvents')): ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= Url::to(['/participacao/index']) ?>">
+                                Área do Paciente
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= Url::to(['/participacao/meus-eventos']) ?>">
+                                Meus Eventos
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= Url::to(['/teste-laboratorial/meus-testes']) ?>">
+                                Meus Testes
+                            </a>
+                        </li>
+                    <?php endif; ?>
+
+
+                    <!-- ÁREA DO COLABORADOR -->
+                    <?php if (Yii::$app->user->can('manageEvents')): ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= Url::to(['/evento/index']) ?>">
+                                Gestão de Eventos
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= Url::to(['/teste-laboratorial/index']) ?>">
+                                Testes Laboratoriais
+                            </a>
+                        </li>
+                    <?php endif; ?>
+
                 <?php endif; ?>
 
-                <?php if ($isLogged && $auth->checkAccess($userId, 'colaborador')): ?>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= Url::to(['/evento/index']) ?>">Eventos</a>
-                    </li>
-                <?php endif; ?>
-
-                <?php if ($isLogged && $auth->checkAccess($userId, 'paciente')): ?>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= Url::to(['/participacao/meus-eventos']) ?>">Meus Eventos</a>
-                    </li>
-                <?php endif; ?>
 
                 <?php if (!$isLogged): ?>
 

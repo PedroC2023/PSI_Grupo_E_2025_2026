@@ -4,56 +4,52 @@ namespace common\models;
 
 use Yii;
 
-/**
- * This is the model class for table "teste_laboratorial".
- *
- * @property int $id
- * @property int $id_pessoa
- * @property int $id_laboratorio
- * @property string|null $tipo_teste
- * @property string|null $resultado
- * @property string|null $data_teste
- */
 class TesteLaboratorial extends \yii\db\ActiveRecord
 {
-
-
-    /**
-     * {@inheritdoc}
-     */
     public static function tableName()
     {
         return 'teste_laboratorial';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function rules()
     {
         return [
-            [['tipo_teste', 'resultado', 'data_teste'], 'default', 'value' => null],
-            [['id_pessoa', 'id_laboratorio'], 'required'],
+            [['id_pessoa', 'id_laboratorio', 'tipo_teste', 'data_teste'], 'required'],
             [['id_pessoa', 'id_laboratorio'], 'integer'],
             [['data_teste'], 'safe'],
             [['tipo_teste'], 'string', 'max' => 100],
             [['resultado'], 'string', 'max' => 50],
+
+            [['id_pessoa'], 'exist',
+                'targetClass' => Pessoa::class,
+                'targetAttribute' => ['id_pessoa' => 'id']
+            ],
+            [['id_laboratorio'], 'exist',
+                'targetClass' => Laboratorio::class,
+                'targetAttribute' => ['id_laboratorio' => 'id']
+            ],
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function attributeLabels()
     {
         return [
             'id' => 'ID',
-            'id_pessoa' => 'Id Pessoa',
-            'id_laboratorio' => 'Id Laboratorio',
-            'tipo_teste' => 'Tipo Teste',
+            'id_pessoa' => 'Paciente',
+            'id_laboratorio' => 'Laboratório',
+            'tipo_teste' => 'Tipo de Teste',
             'resultado' => 'Resultado',
-            'data_teste' => 'Data Teste',
+            'data_teste' => 'Data do Teste',
         ];
     }
 
+    public function getPessoa()
+    {
+        return $this->hasOne(Pessoa::class, ['id' => 'id_pessoa']);
+    }
+
+    public function getLaboratorio()
+    {
+        return $this->hasOne(Laboratorio::class, ['id' => 'id_laboratorio']);
+    }
 }
