@@ -14,15 +14,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'telefone')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'role')->dropDownList([
-        'paciente' => 'Paciente',
-        'colaborador' => 'Colaborador',
-    ]) ?>
-
-    <?= $form->field($model, 'id_regiao')->textInput() ?>
-
-    <?= $form->field($model, 'id_user')->textInput() ?>
-
     <?= $form->field($model, 'nome')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'n_identificacao_fiscal')->textInput(['maxlength' => true]) ?>

@@ -22,6 +22,8 @@ return [
         ],
         'request' => [
             'csrfParam' => '_csrf-backend',
+            'cookieValidationKey' => 'algo',
+            'enableCsrfValidation' => true,
         ],
         'user' => [
             'identityClass' => 'common\models\User',

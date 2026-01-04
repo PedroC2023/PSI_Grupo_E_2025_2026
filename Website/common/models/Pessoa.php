@@ -174,6 +174,16 @@ class Pessoa extends \yii\db\ActiveRecord
             $this->role = 'paciente';
         }
     }
+    public function getParticipacoes()
+    {
+        return $this->hasMany(ParticipacaoEvento::class, ['id_pessoa' => 'id']);
+    }
+
+    public function getColaboracoes()
+    {
+        return $this->hasMany(ColaboracaoEvento::class, ['id_pessoa' => 'id']);
+    }
+
 
 
 }

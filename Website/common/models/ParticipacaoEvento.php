@@ -1,55 +1,70 @@
 <?php
-
 namespace common\models;
 
 use Yii;
 
-/**
- * This is the model class for table "participacao_evento".
- *
- * @property int $id
- * @property int $id_evento
- * @property int $id_utilizador
- * @property int $data_participacao
- * @property int $status_participacao
- */
 class ParticipacaoEvento extends \yii\db\ActiveRecord
 {
-
-
-    /**
-     * {@inheritdoc}
-     */
     public static function tableName()
     {
         return 'participacao_evento';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function rules()
     {
         return [
-            [['id_evento', 'id_utilizador', 'data_participacao', 'status_participacao'], 'required'],
-            [['id_evento', 'id_utilizador', 'data_participacao', 'status_participacao'], 'integer'],
-            [['id_evento'], 'unique'],
-            [['id_utilizador'], 'unique'],
+            [['id_evento', 'id_utilizador'], 'required'],
+            [['id_evento', 'id_utilizador'], 'integer'],
+            [['data_participacao'], 'safe'],
+            [['status_participacao'], 'string', 'max' => 50],
+
+            // evitar inscrições duplicadas
+            [['id_evento', 'id_utilizador'], 'unique',
+                'targetAttribute' => ['id_evento', 'id_utilizador'],
+                'message' => 'Já estás inscrito neste evento.'
+            ],
+
+            // FK correta → EVENTO
+            [['id_evento'], 'exist',
+                'skipOnError' => true,
+                'targetClass' => Evento::class,
+                'targetAttribute' => ['id_evento' => 'id']
+            ],
+
+            // FK correta → USER (NÃO Pessoa)
+            [['id_utilizador'], 'exist',
+                'skipOnError' => true,
+                'targetClass' => User::class,
+                'targetAttribute' => ['id_utilizador' => 'id']
+            ],
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function attributeLabels()
     {
         return [
             'id' => 'ID',
-            'id_evento' => 'Id Evento',
-            'id_utilizador' => 'Id Utilizador',
-            'data_participacao' => 'Data Participacao',
-            'status_participacao' => 'Status Participacao',
+            'id_evento' => 'Evento',
+            'id_utilizador' => 'Utilizador',
+            'data_participacao' => 'Data Participação',
+            'status_participacao' => 'Estado',
         ];
     }
 
+    // ================= RELAÇÕES =================
+
+    public function getEvento()
+    {
+        return $this->hasOne(Evento::class, ['id' => 'id_evento']);
+    }
+
+    public function getUser()
+    {
+        return $this->hasOne(User::class, ['id' => 'id_utilizador']);
+    }
+
+    public function getPessoa()
+    {
+        return $this->hasOne(Pessoa::class, ['id_user' => 'id_utilizador']);
+    }
 }

@@ -13,6 +13,7 @@ AdminLteAsset::register($this);
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <title><?= Html::encode($this->title) ?></title>
+    <?php $this->registerCsrfMetaTags() ?> 
     <?php $this->head() ?>
 </head>
 
@@ -53,16 +54,28 @@ AdminLteAsset::register($this);
                             <p>Dashboard</p>
                         </a>
                     </li>
-                    <!--
+                    
                     <li class="nav-item">
                         <a href="/PSI_Grupo_E_2025_2026/Website/backend/web/pessoa/index" class="nav-link">
                             <p>Pessoas</p>
                         </a>
                     </li>
-                    -->
+                    
                     <li class="nav-item">
-                        <a href="/PSI_Grupo_E_2025_2026/Website/backend/web/role/index" class="nav-link">
+                        <a href="/PSI_Grupo_E_2025_2026/Website/backend/web/rbac/index" class="nav-link">
                             <p>Gestão de Roles</p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="/PSI_Grupo_E_2025_2026/Website/backend/web/laboratorio/index" class="nav-link">
+                            <p>Laboratórios</p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="/PSI_Grupo_E_2025_2026/Website/backend/web/tipo-acao/index" class="nav-link">
+                            <p>Tipo de Ações</p>
                         </a>
                     </li>
 

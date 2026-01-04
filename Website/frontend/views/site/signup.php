@@ -1,9 +1,4 @@
 <?php
-
-/** @var yii\web\View $this */
-/** @var yii\bootstrap5\ActiveForm $form */
-/** @var \frontend\models\SignupForm $model */
-
 use yii\bootstrap5\Html;
 use yii\bootstrap5\ActiveForm;
 use yii\bootstrap5\BootstrapAsset;
@@ -27,6 +22,8 @@ $this->registerCssFile('@web/css/signup.css', ['depends' => [BootstrapAsset::cla
         <?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
 
         <?= $form->field($model, 'username')->textInput(['autofocus' => true, 'placeholder' => 'Escolha o seu username']) ?>
+
+
 
         <?= $form->field($model, 'email')->input('email', ['placeholder' => 'you@email.com']) ?>
 
