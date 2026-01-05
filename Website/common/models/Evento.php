@@ -16,8 +16,15 @@ class Evento extends \yii\db\ActiveRecord
         return [
             [
                 ['titulo', 'descricao', 'data_inicio', 'data_fim', 'tipo_evento',
-                 'status', 'pais', 'regiao', 'cidade', 'endereco'],
+                 'status', 'pais', 'regiao', 'cidade', 'endereco', 'id_especialidade'],
                 'required'
+            ],
+            [['id_especialidade'], 'integer'],
+
+            [['id_especialidade'], 'exist',
+                'skipOnError' => true,
+                'targetClass' => Especialidade::class,
+                'targetAttribute' => ['id_especialidade' => 'id']
             ],
 
             [['data_inicio', 'data_fim'], 'safe'],
@@ -95,5 +102,6 @@ class Evento extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::class, ['id' => 'id_utilizador']);
     }
+    
 }
 ?>
