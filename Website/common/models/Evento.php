@@ -78,6 +78,11 @@ class Evento extends \yii\db\ActiveRecord
             $this->save(false, ['status']);
         }
     }
+    public function getEspecialidade()
+    {
+        return $this->hasOne(Especialidade::class, ['id' => 'id_especialidade']);
+    }
+
 
     // ================== RELAÇÕES ==================
 

@@ -8,6 +8,10 @@ use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
 use common\models\TesteLaboratorial;
 use common\models\Pessoa;
+use common\models\Laboratorio;
+use yii\web\ForbiddenHttpException;
+use yii\web\BadRequestHttpException;
+
 
 class TesteLaboratorialController extends Controller
 {
@@ -17,19 +21,18 @@ class TesteLaboratorialController extends Controller
             'access' => [
                 'class' => AccessControl::class,
                 'rules' => [
-
-                    // paciente vê os seus testes
+                    // paciente
                     [
-                        'actions' => ['meus-testes'],
+                        'actions' => ['meus-testes', 'escolher-laboratorio'],
                         'allow' => true,
-                        'roles' => ['paciente'],
+                        'roles' => ['viewMyTestes'],
                     ],
 
-                    // colaborador gere testes
+                    // colaborador / admin
                     [
-                        'actions' => ['index', 'create', 'update'],
+                        'actions' => ['index', 'create', 'update', 'view'],
                         'allow' => true,
-                        'roles' => ['colaborador', 'admin'],
+                        'roles' => ['manageTestes'],
                     ],
                 ],
             ],
@@ -47,12 +50,17 @@ class TesteLaboratorialController extends Controller
     public function actionCreate()
     {
         $model = new TesteLaboratorial();
+        $model->estado = 'pendente';
+        $model->data_criacao = date('Y-m-d H:i:s');
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
         }
 
-        return $this->render('create', compact('model'));
+        return $this->render('create', [
+            'model' => $model,
+            'pessoas' => Pessoa::find()->all(),
+        ]);
     }
 
     // EDITAR / REGISTAR RESULTADO
@@ -71,12 +79,28 @@ class TesteLaboratorialController extends Controller
     // PACIENTE: ver os seus testes
     public function actionMeusTestes()
     {
-        $pessoa = Pessoa::findOne(['id_user' => Yii::$app->user->id]);
+        $pessoaId = Yii::$app->user->identity->pessoa->id;
 
         $testes = TesteLaboratorial::find()
-            ->where(['id_pessoa' => $pessoa->id])
+            ->where(['id_pessoa' => $pessoaId])
+            ->orderBy(['data_criacao' => SORT_DESC])
             ->all();
 
-        return $this->render('meus-testes', compact('testes'));
+        return $this->render('meus-testes', [
+            'testes' => $testes,
+        ]);
     }
+
+    public function actionDebugUser()
+    {
+        echo '<pre>';
+        var_dump([
+            'isGuest' => Yii::$app->user->isGuest,
+            'id' => Yii::$app->user->id,
+            'username' => Yii::$app->user->identity->username ?? null,
+        ]);
+        echo '</pre>';
+        exit;
+    }
+
 }

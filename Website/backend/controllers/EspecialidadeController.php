@@ -1,19 +1,17 @@
 <?php
 
-namespace frontend\controllers;
+namespace backend\controllers;
 
-use Yii;
-use common\models\Pessoa;
+use common\models\Especialidade;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 
 /**
- * PessoaController implements the CRUD actions for Pessoa model.
+ * EspecialidadeController implements the CRUD actions for Especialidade model.
  */
-class PessoaController extends Controller
+class EspecialidadeController extends Controller
 {
     /**
      * @inheritDoc
@@ -22,22 +20,16 @@ class PessoaController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::class,
+                'class' => \yii\filters\AccessControl::class,
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['admin'], // só admin
-                    ],
-                    // USER LOGADO: apenas gerir o próprio perfil
-                    [
-                        'allow' => true,
-                        'roles' => ['@'],
-                        'actions' => ['update', 'view'],
+                        'roles' => ['manageTipoAcao'],
                     ],
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::class,
+                'class' => \yii\filters\VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
                 ],
@@ -46,14 +38,14 @@ class PessoaController extends Controller
     }
 
     /**
-     * Lists all Pessoa models.
+     * Lists all Especialidade models.
      *
      * @return string
      */
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Pessoa::find(),
+            'query' => Especialidade::find(),
             /*
             'pagination' => [
                 'pageSize' => 50
@@ -72,7 +64,7 @@ class PessoaController extends Controller
     }
 
     /**
-     * Displays a single Pessoa model.
+     * Displays a single Especialidade model.
      * @param int $id ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
@@ -85,17 +77,20 @@ class PessoaController extends Controller
     }
 
     /**
-     * Creates a new Pessoa model.
+     * Creates a new Especialidade model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new Pessoa();
-        $model->id_user = Yii::$app->user->id;
+        $model = new Especialidade();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->goHome();
+        if ($this->request->isPost) {
+            if ($model->load($this->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+        } else {
+            $model->loadDefaultValues();
         }
 
         return $this->render('create', [
@@ -103,9 +98,8 @@ class PessoaController extends Controller
         ]);
     }
 
-
     /**
-     * Updates an existing Pessoa model.
+     * Updates an existing Especialidade model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return string|\yii\web\Response
@@ -115,22 +109,8 @@ class PessoaController extends Controller
     {
         $model = $this->findModel($id);
 
-        // 🔐 BLOQUEIO DE SEGURANÇA
-        // só o dono do perfil OU admin pode editar
-        if (
-            $model->id_user !== Yii::$app->user->id &&
-            !Yii::$app->user->can('admin')
-        ) {
-            throw new \yii\web\ForbiddenHttpException('Não tem permissão para editar este perfil.');
-        }
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-
-            // marcar perfil como completo
-            $model->perfil_completo = 1;
-            $model->save(false);
-
-            return $this->goHome();
+        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
@@ -139,7 +119,7 @@ class PessoaController extends Controller
     }
 
     /**
-     * Deletes an existing Pessoa model.
+     * Deletes an existing Especialidade model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return \yii\web\Response
@@ -153,21 +133,18 @@ class PessoaController extends Controller
     }
 
     /**
-     * Finds the Pessoa model based on its primary key value.
+     * Finds the Especialidade model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return Pessoa the loaded model
+     * @return Especialidade the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Pessoa::findOne(['id' => $id])) !== null) {
+        if (($model = Especialidade::findOne(['id' => $id])) !== null) {
             return $model;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
-
-
-
 }

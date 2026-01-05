@@ -31,8 +31,7 @@ use yii\jui\DatePicker;
     <?= $form->field($model, 'tipo_evento')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'status')->dropDownList([
-        'aberto' => 'Aberto',
-        'fechado' => 'Fechado'
+        'aberto' => 'Aberto'        
     ]);?>
 
     <div class="form-group">

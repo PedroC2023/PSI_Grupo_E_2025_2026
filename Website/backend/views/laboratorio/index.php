@@ -14,10 +14,10 @@ $this->title = 'Laboratórios';
 <?= GridView::widget([
     'dataProvider' => $dataProvider,
     'columns' => [
+        'id',
         'nome',
-        'referencia',
+        'Localizacao',
         'contacto',
-        'email',
         ['class' => 'yii\grid\ActionColumn'],
     ],
 ]); ?>
