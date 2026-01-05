@@ -14,6 +14,17 @@ class LoginCest
      * @see \Codeception\Module\Yii2::loadFixtures()
      * @return array
      */
+    public function loginComSucesso(FunctionalTester $I)
+    {
+        $I->amOnPage(['/site/login']);
+        $I->see('Login');
+
+        $I->fillField('Username', 'admin'); // ajusta
+        $I->fillField('Password', '123456'); // ajusta
+        $I->click('Login');
+
+        $I->see('Logout');
+    }
     public function _fixtures()
     {
         return [

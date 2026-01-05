@@ -2,15 +2,29 @@
 
 namespace common\models;
 
-use yii\db\ActiveRecord;
+use Yii;
 
-class TipoAcao extends ActiveRecord
+/**
+ * This is the model class for table "tipo_teste".
+ *
+ * @property int $id
+ * @property string $descricao
+ */
+class TipoTeste extends \yii\db\ActiveRecord
 {
+
+
+    /**
+     * {@inheritdoc}
+     */
     public static function tableName()
     {
-        return 'tipo_acao';
+        return 'tipo_teste';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function rules()
     {
         return [
@@ -19,17 +33,16 @@ class TipoAcao extends ActiveRecord
         ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function attributeLabels()
     {
         return [
             'id' => 'ID',
-            'descricao' => 'Descrição',
+            'descricao' => 'Descricao',
             'nome' => 'Nome',
         ];
     }
 
-    public function getAcoes()
-    {
-        return $this->hasMany(AcaoResposta::class, ['id_tipo_acao' => 'id']);
-    }
 }
