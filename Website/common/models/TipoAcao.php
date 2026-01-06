@@ -14,8 +14,8 @@ class TipoAcao extends ActiveRecord
     public function rules()
     {
         return [
-            [['descricao'], 'required'],
-            [['descricao'], 'string', 'max' => 150],
+            [['descricao','nome'], 'required'],
+            [['descricao','nome'], 'string', 'max' => 150],
         ];
     }
 
@@ -24,6 +24,7 @@ class TipoAcao extends ActiveRecord
         return [
             'id' => 'ID',
             'descricao' => 'Descrição',
+            'nome' => 'Nome',
         ];
     }
 

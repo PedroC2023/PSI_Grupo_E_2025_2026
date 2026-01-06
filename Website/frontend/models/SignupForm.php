@@ -48,7 +48,7 @@ class SignupForm extends Model
         if (!$this->validate()) {
             return null;
         }
-        
+
         $user = new User();
         $user->username = $this->username;
         $user->email = $this->email;
@@ -59,25 +59,22 @@ class SignupForm extends Model
 
         if ($user->save()) {
 
-            // === RBAC: atribuir role padrão ===
+            // ✅ RBAC — atribuir role padrão
             $auth = Yii::$app->authManager;
-
-            // Escolhe o role padrão (muda para 'visitante' se quiseres)
             $defaultRole = $auth->getRole('paciente');
 
-            if ($defaultRole) {
+            if ($defaultRole !== null) {
                 $auth->assign($defaultRole, $user->id);
             }
 
-            // === Criar registo na tabela pessoa (se existir) ===
+            // ✅ Criar Pessoa (SEM role)
             if (class_exists(\common\models\Pessoa::class)) {
                 $pessoa = new \common\models\Pessoa();
                 $pessoa->id_user = $user->id;
-                $pessoa->role = 'paciente'; // ou visitante, colaborador, conforme o teu sistema
-                $pessoa->save();
+                $pessoa->save(false);
             }
 
-            // === Enviar email de verificação ===
+            // Enviar email de verificação
             return $this->sendEmail($user);
         }
 

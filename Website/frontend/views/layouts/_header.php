@@ -53,11 +53,6 @@ if ($isLogged && isset(Yii::$app->user->identity->avatar) && Yii::$app->user->id
                                 Meus Eventos
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= Url::to(['/teste-laboratorial/meus-testes']) ?>">
-                                Meus Testes
-                            </a>
-                        </li>
                     <?php endif; ?>
 
 
@@ -67,13 +62,30 @@ if ($isLogged && isset(Yii::$app->user->identity->avatar) && Yii::$app->user->id
                             <a class="nav-link" href="<?= Url::to(['/evento/index']) ?>">
                                 Gestão de Eventos
                             </a>
+                        </li>                        
+                    <?php endif; ?>
+
+                    <?php if (Yii::$app->user->can('participateEvents')): ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= Url::to(['/meus-testes/index']) ?>">
+                                Meus Testes
+                            </a>
                         </li>
+                    <?php endif; ?>
+
+                    <?php if (Yii::$app->user->can('manageEvents')): ?>
                         <li class="nav-item">
                             <a class="nav-link" href="<?= Url::to(['/teste-laboratorial/index']) ?>">
                                 Testes Laboratoriais
                             </a>
                         </li>
                     <?php endif; ?>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= Url::to(['/calendario']) ?>">
+                            Calendário
+                        </a>
+                    </li>
 
                 <?php endif; ?>
 

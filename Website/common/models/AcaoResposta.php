@@ -15,7 +15,7 @@ class AcaoResposta extends \yii\db\ActiveRecord
         return [
             [['id_evento', 'id_pessoa', 'id_tipo_acao'], 'required'],
             [['id_evento', 'id_pessoa', 'id_tipo_acao'], 'integer'],
-            [['mensagem'], 'string'],
+            [['resposta'], 'string'],
             [['data'], 'safe'],
         ];
     }
@@ -27,7 +27,7 @@ class AcaoResposta extends \yii\db\ActiveRecord
             'id_evento' => 'Evento',
             'id_pessoa' => 'Pessoa',
             'id_tipo_acao' => 'Tipo de Ação',
-            'mensagem' => 'Mensagem',
+            'resposta' => 'Resposta',
             'data' => 'Data',
         ];
     }

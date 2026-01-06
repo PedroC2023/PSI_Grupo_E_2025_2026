@@ -1,20 +1,23 @@
 <?php
-
+use yii\widgets\ActiveForm;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
-
-/** @var yii\web\View $this */
-/** @var common\models\TesteLaboratorial $model */
-
-$this->title = 'Create Teste Laboratorial';
-$this->params['breadcrumbs'][] = ['label' => 'Teste Laboratorials', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="teste-laboratorial-create">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+<?php $form = ActiveForm::begin(); ?>
 
-    <?= $this->render('_form', [
-        'model' => $model,
-    ]) ?>
+<?= $form->field($model, 'id_pessoa')->dropDownList(
+    ArrayHelper::map(\common\models\Pessoa::find()->all(), 'id', 'nome'),
+    ['prompt' => 'Selecionar paciente']
+) ?>
 
-</div>
+<?= $form->field($model, 'id_tipo_teste')->dropDownList(
+    ArrayHelper::map(\common\models\TipoTeste::find()->all(), 'id', 'nome'),
+    ['prompt' => 'Selecionar tipo de teste']
+) ?>
+
+<?= $form->field($model, 'data_realizacao')->input('date') ?>
+
+<?= Html::submitButton('Criar Teste', ['class' => 'btn btn-success']) ?>
+
+<?php ActiveForm::end(); ?>

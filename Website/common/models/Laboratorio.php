@@ -23,23 +23,16 @@ class Laboratorio extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nome', 'contacto', 'email'], 'required'],
+            [['nome'], 'required'],
             [['nome'], 'string', 'max' => 150],
             [['referencia'], 'string', 'max' => 100],
             [['contacto'], 'string', 'max' => 50],
             [['email'], 'email'],
-            [['email'], 'string', 'max' => 150],
         ];
     }
 
-    public function attributeLabels()
+    public function getTestes()
     {
-        return [
-            'id' => 'ID',
-            'nome' => 'Nome',
-            'referencia' => 'Referência',
-            'contacto' => 'Contacto',
-            'email' => 'Email',
-        ];
+        return $this->hasMany(TesteLaboratorial::class, ['id_laboratorio' => 'id']);
     }
 }
