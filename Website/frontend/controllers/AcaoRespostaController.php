@@ -17,9 +17,22 @@ class AcaoRespostaController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
+<<<<<<< HEAD
                         'allow' => true,
                         'roles' => ['manageEvents'], // colaboradores
                     ],
+=======
+                        'actions' => ['create'],
+                        'allow' => true,
+                        'roles' => ['createAcaoResposta'],
+                    ],
+                    [
+                        'actions' => ['index'],
+                        'allow' => true,
+                        'roles' => ['viewAcaoResposta'],
+                    ],
+
+>>>>>>> main
                 ],
             ],
         ];

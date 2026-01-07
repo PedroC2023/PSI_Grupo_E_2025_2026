@@ -15,6 +15,8 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use common\models\Pessoa;
+
 
 /**
  * Site controller
@@ -86,12 +88,13 @@ class SiteController extends Controller
     public function actionLogin()
     {
         if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
+            return $this->redirectAfterLogin();
         }
 
         $model = new LoginForm();
+
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            return $this->redirectAfterLogin();
         }
 
         $model->password = '';
@@ -100,6 +103,74 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
+    protected function redirectAfterLogin()
+    {
+        $pessoa = Pessoa::find()
+            ->where(['id_user' => Yii::$app->user->id])
+            ->one();
+
+        // Primeiro login / perfil incompleto
+        if ($pessoa && empty($pessoa->telefone)) {
+            return $this->redirect(['pessoa/update', 'id' => $pessoa->id]);
+        }
+
+        return $this->goHome();
+    }
+
+    public function beforeAction($action)
+    {
+        if (!parent::beforeAction($action)) {
+            return false;
+        }
+
+        // 1️⃣ Ignorar utilizadores não autenticados
+        if (Yii::$app->user->isGuest) {
+            return true;
+        }
+
+        // 2️⃣ Rotas permitidas mesmo com perfil incompleto
+        $allowedRoutes = [
+            'site/logout',
+            'pessoa/perfil',
+            'pessoa/view',
+            'site/login',
+        ];
+
+        $route = Yii::$app->controller->id . '/' . $action->id;
+
+        // 3️⃣ Obter a pessoa do utilizador
+        $pessoa = Pessoa::find()
+            ->where(['id_user' => Yii::$app->user->id])
+            ->one();
+
+        // 4️⃣ Bloquear navegação se perfil não estiver completo
+        if ($pessoa && !$pessoa->perfil_completo && !in_array($route, $allowedRoutes)) {
+            return $this->redirect(['pessoa/perfil']);
+        }
+
+        return true;
+    }
+    public function actionPerfil()
+    {
+        $model = Pessoa::find()
+            ->where(['id_user' => Yii::$app->user->id])
+            ->one();
+
+        if (!$model) {
+            throw new \yii\web\NotFoundHttpException('Perfil não encontrado.');
+        }
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $model->perfil_completo = 1;
+            $model->save(false);
+            return $this->goHome();
+        }
+
+        return $this->render('update', [
+            'model' => $model,
+        ]);
+    }
+
 
     /**
      * Logs out the current user.

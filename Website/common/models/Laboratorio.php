@@ -23,11 +23,16 @@ class Laboratorio extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+<<<<<<< HEAD
             [['nome', 'contacto', 'email'], 'required'],
+=======
+            [['nome'], 'required'],
+>>>>>>> main
             [['nome'], 'string', 'max' => 150],
             [['referencia'], 'string', 'max' => 100],
             [['contacto'], 'string', 'max' => 50],
             [['email'], 'email'],
+<<<<<<< HEAD
             [['email'], 'string', 'max' => 150],
         ];
     }
@@ -41,5 +46,13 @@ class Laboratorio extends \yii\db\ActiveRecord
             'contacto' => 'Contacto',
             'email' => 'Email',
         ];
+=======
+        ];
+    }
+
+    public function getTestes()
+    {
+        return $this->hasMany(TesteLaboratorial::class, ['id_laboratorio' => 'id']);
+>>>>>>> main
     }
 }

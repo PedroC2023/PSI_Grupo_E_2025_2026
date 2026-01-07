@@ -82,4 +82,8 @@ use yii\helpers\Html;
         ?>
     </table>
 
+<<<<<<< HEAD
 </div>
+=======
+</div>
+>>>>>>> main

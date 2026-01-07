@@ -10,7 +10,17 @@ echo GridView::widget([
     'columns' => [
         'id',
         'descricao',
+<<<<<<< HEAD
+=======
+        'nome',
+>>>>>>> main
         ['class' => 'yii\grid\ActionColumn'],
     ],
 ]);
 
+<<<<<<< HEAD
+=======
+// Yii::$app->user->can('manageTipoAcao') ? 'SIM' : 'NÃO' 
+
+
+>>>>>>> main

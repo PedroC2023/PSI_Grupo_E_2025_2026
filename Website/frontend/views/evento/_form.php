@@ -3,6 +3,11 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\jui\DatePicker;
+<<<<<<< HEAD
+=======
+use yii\helpers\ArrayHelper;
+use common\models\Especialidade;
+>>>>>>> main
 
 /** @var yii\web\View $this */
 /** @var common\models\Evento $model */
@@ -17,6 +22,19 @@ use yii\jui\DatePicker;
 
     <?= $form->field($model, 'descricao')->textInput(['maxlength' => true]) ?>
 
+<<<<<<< HEAD
+=======
+    <?= $form->field($model, 'id_especialidade')->dropDownList(
+        ArrayHelper::map(
+            Especialidade::find()->orderBy('nome')->all(),
+            'id',
+            'nome'
+        ),
+        ['prompt' => 'Selecionar especialidade']
+    ) ?>
+
+
+>>>>>>> main
     <?= $form->field($model, 'pais')->textInput() ?>
 
     <?= $form->field($model, 'regiao')->textInput() ?>
@@ -31,8 +49,12 @@ use yii\jui\DatePicker;
     <?= $form->field($model, 'tipo_evento')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'status')->dropDownList([
+<<<<<<< HEAD
         'aberto' => 'Aberto',
         'fechado' => 'Fechado'
+=======
+        'aberto' => 'Aberto'        
+>>>>>>> main
     ]);?>
 
     <div class="form-group">

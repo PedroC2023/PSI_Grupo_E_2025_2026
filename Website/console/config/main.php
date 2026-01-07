@@ -22,15 +22,10 @@ return [
             'namespace' => 'common\fixtures',
           ],
     ],
-    'components' => [
-        'log' => [
-            'targets' => [
-                [
-                    'class' => \yii\log\FileTarget::class,
-                    'levels' => ['error', 'warning'],
-                ],
-            ],
-        ],
+    'components' => [    
+            'authManager' => [
+                'class' => yii\rbac\DbManager::class,
+        ],        
     ],
     'params' => $params,
 ];

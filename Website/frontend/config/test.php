@@ -1,18 +1,24 @@
 <?php
+
 return [
     'id' => 'app-frontend-tests',
+    'basePath' => dirname(__DIR__),
     'components' => [
-        'assetManager' => [
-            'basePath' => __DIR__ . '/../web/assets',
+
+        'cache' => [
+            'class' => yii\caching\DummyCache::class,
         ],
-        'urlManager' => [
-            'showScriptName' => true,
+
+        'session' => [
+            'class' => yii\web\Session,
+            'name' => 'frontend-test-session',
+            'useCookies' => false,
         ],
+
         'request' => [
-            'cookieValidationKey' => 'test',
+            'cookieValidationKey' => 'test-key',
+            'enableCsrfValidation' => false,
         ],
-        'mailer' => [
-            'messageClass' => \yii\symfonymailer\Message::class
-        ]
     ],
 ];
+

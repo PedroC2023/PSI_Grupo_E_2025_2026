@@ -2,16 +2,16 @@
 
 namespace backend\controllers;
 
-use common\models\Evento;
+use common\models\Especialidade;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * EventoController implements the CRUD actions for Evento model.
+ * EspecialidadeController implements the CRUD actions for Especialidade model.
  */
-class EventoController extends Controller
+class EspecialidadeController extends Controller
 {
     /**
      * @inheritDoc
@@ -24,28 +24,28 @@ class EventoController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['index', 'view'],
-                        'roles' => ['@'], // qualquer utilizador autenticado
-                    ],
-                    [
-                        'allow' => true,
-                        'actions' => ['create', 'update', 'delete'],
-                        'roles' => ['manageEvents'], // só quem tem esta permissão
+                        'roles' => ['manageTipoAcao'],
                     ],
                 ],
             ],
+            'verbs' => [
+                'class' => \yii\filters\VerbFilter::class,
+                'actions' => [
+                    'delete' => ['POST'],
+                ],
+            ],
         ];
-    }  
+    }
 
     /**
-     * Lists all Evento models.
+     * Lists all Especialidade models.
      *
      * @return string
      */
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Evento::find(),
+            'query' => Especialidade::find(),
             /*
             'pagination' => [
                 'pageSize' => 50
@@ -64,7 +64,7 @@ class EventoController extends Controller
     }
 
     /**
-     * Displays a single Evento model.
+     * Displays a single Especialidade model.
      * @param int $id ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
@@ -77,13 +77,13 @@ class EventoController extends Controller
     }
 
     /**
-     * Creates a new Evento model.
+     * Creates a new Especialidade model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new Evento();
+        $model = new Especialidade();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
@@ -99,7 +99,7 @@ class EventoController extends Controller
     }
 
     /**
-     * Updates an existing Evento model.
+     * Updates an existing Especialidade model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return string|\yii\web\Response
@@ -119,7 +119,7 @@ class EventoController extends Controller
     }
 
     /**
-     * Deletes an existing Evento model.
+     * Deletes an existing Especialidade model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return \yii\web\Response
@@ -133,15 +133,15 @@ class EventoController extends Controller
     }
 
     /**
-     * Finds the Evento model based on its primary key value.
+     * Finds the Especialidade model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return Evento the loaded model
+     * @return Especialidade the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Evento::findOne(['id' => $id])) !== null) {
+        if (($model = Especialidade::findOne(['id' => $id])) !== null) {
             return $model;
         }
 

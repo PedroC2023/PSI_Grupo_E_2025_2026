@@ -73,6 +73,7 @@ class EventoController extends Controller
     {
         $model = new Evento();
 
+<<<<<<< HEAD
         if ($model->load(Yii::$app->request->post())) {
 
         // preenche automaticamente o utilizador que cria o evento
@@ -82,6 +83,17 @@ class EventoController extends Controller
             return $this->redirect(['index']);
         }
 }
+=======
+            if ($model->load(Yii::$app->request->post())) {
+
+            // preenche automaticamente o utilizador que cria o evento
+            $model->id_utilizador = Yii::$app->user->id;
+
+            if ($model->save()) {
+                return $this->redirect(['index']);
+            }
+        }
+>>>>>>> main
 
 
         return $this->render('create', ['model' => $model]);

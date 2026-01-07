@@ -4,19 +4,16 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
-/** @var common\models\TipoAcao $model */
+/** @var common\models\TipoTeste $model */
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
-<div class="tipo-acao-form">
+<div class="tipo-teste-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'descricao')->textInput(['maxlength' => true]) ?>
-<<<<<<< HEAD
-=======
     <?= $form->field($model, 'nome')->textInput(['maxlength' => true]) ?>
->>>>>>> main
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

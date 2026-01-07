@@ -28,6 +28,30 @@ class RbacController extends Controller
         $manageLaboratorios = $auth->createPermission('manageLaboratorios');
         $auth->add($manageLaboratorios);
 
+<<<<<<< HEAD
+=======
+        $manageTipoAcao = $auth->createPermission('manageTipoAcao');
+        $manageTipoAcao->description = 'Gerir tipos de ação';
+        $auth->add($manageTipoAcao);
+
+        $viewMyParticipations = $auth->createPermission('viewMyParticipations');
+        $auth->add($viewMyParticipations);
+
+        $createAcaoResposta = $auth->createPermission('createAcaoResposta');
+        $auth->add($createAcaoResposta);
+
+        $viewAcaoResposta = $auth->createPermission('viewAcaoResposta');
+        $auth->add($viewAcaoResposta);
+
+        $manageTestes = $auth->createPermission('manageTestes');
+        $auth->add($manageTestes);
+
+        $viewMyTestes = $auth->createPermission('viewMyTestes');
+        $auth->add($viewMyTestes);
+
+
+
+>>>>>>> main
         // ROLES
         $admin = $auth->createRole('admin');
         $auth->add($admin);
@@ -36,12 +60,28 @@ class RbacController extends Controller
         $auth->addChild($admin, $viewEvents);
         $auth->addChild($admin, $participateEvents);
         $auth->addChild($admin, $manageLaboratorios);
+<<<<<<< HEAD
+=======
+        $auth->addChild($admin, $manageTipoAcao);        
+        $auth->addChild($admin, $manageTestes);
+        $auth->addChild($admin, $viewMyTestes);
+        $auth->addChild($admin, $viewMyParticipations);
+
+>>>>>>> main
 
         $colaborador = $auth->createRole('colaborador');
         $auth->add($colaborador);
         $auth->addChild($colaborador, $manageEvents);
         $auth->addChild($colaborador, $viewEvents);
+<<<<<<< HEAD
         $auth->addChild($colaborador, $participateEvents);
+=======
+        // $auth->addChild($colaborador, $participateEvents);
+        $auth->addChild($colaborador, $createAcaoResposta);
+        $auth->addChild($colaborador, $viewAcaoResposta);
+        $auth->addChild($colaborador, $manageTestes);
+        $auth->addChild($colaborador, $viewMyTestes);
+>>>>>>> main
         // opcional:
         // $auth->addChild($colaborador, $manageLaboratorios);
 
@@ -49,11 +89,28 @@ class RbacController extends Controller
         $auth->add($paciente);
         $auth->addChild($paciente, $viewEvents);
         $auth->addChild($paciente, $participateEvents);
+        $auth->addChild($paciente, $viewMyParticipations);
+        $auth->addChild($paciente, $viewMyTestes);
 
         $visitante = $auth->createRole('visitante');
         $auth->add($visitante);
         $auth->addChild($visitante, $viewEvents);
 
+<<<<<<< HEAD
+=======
+        // ======================
+        // ATRIBUIR ROLES A UTILIZADORES
+        // ======================
+
+        // user_id = 1 → admin
+        $auth->assign($admin, 3);
+
+        // exemplos (ajusta aos IDs reais)
+        $auth->assign($colaborador, 2);
+        $auth->assign($paciente, 1);
+
+        
+>>>>>>> main
         echo "RBAC inicializado com sucesso!\n";
     }
 }

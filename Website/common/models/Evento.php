@@ -16,10 +16,24 @@ class Evento extends \yii\db\ActiveRecord
         return [
             [
                 ['titulo', 'descricao', 'data_inicio', 'data_fim', 'tipo_evento',
+<<<<<<< HEAD
                  'status', 'pais', 'regiao', 'cidade', 'endereco'],
                 'required'
             ],
 
+=======
+                 'status', 'pais', 'regiao', 'cidade', 'endereco', 'id_especialidade'],
+                'required'
+            ],
+            [['id_especialidade'], 'integer'],
+
+            [['id_especialidade'], 'exist',
+                'skipOnError' => true,
+                'targetClass' => Especialidade::class,
+                'targetAttribute' => ['id_especialidade' => 'id']
+            ],
+
+>>>>>>> main
             [['data_inicio', 'data_fim'], 'safe'],
 
             [
@@ -78,6 +92,14 @@ class Evento extends \yii\db\ActiveRecord
             $this->save(false, ['status']);
         }
     }
+<<<<<<< HEAD
+=======
+    public function getEspecialidade()
+    {
+        return $this->hasOne(Especialidade::class, ['id' => 'id_especialidade']);
+    }
+
+>>>>>>> main
 
     // ================== RELAÇÕES ==================
 
@@ -90,5 +112,9 @@ class Evento extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::class, ['id' => 'id_utilizador']);
     }
+<<<<<<< HEAD
+=======
+    
+>>>>>>> main
 }
 ?>

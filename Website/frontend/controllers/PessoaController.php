@@ -7,6 +7,7 @@ use common\models\Pessoa;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 
 /**
@@ -19,17 +20,29 @@ class PessoaController extends Controller
      */
     public function behaviors()
     {
-        return array_merge(
-            parent::behaviors(),
-            [
-                'verbs' => [
-                    'class' => VerbFilter::className(),
-                    'actions' => [
-                        'delete' => ['POST'],
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['admin'], // só admin
+                    ],
+                    // USER LOGADO: apenas gerir o próprio perfil
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'actions' => ['update', 'view'],
                     ],
                 ],
-            ]
-        );
+            ],
+            'verbs' => [
+                'class' => VerbFilter::class,
+                'actions' => [
+                    'delete' => ['POST'],
+                ],
+            ],
+        ];
     }
 
     /**
@@ -102,8 +115,22 @@ class PessoaController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        // 🔐 BLOQUEIO DE SEGURANÇA
+        // só o dono do perfil OU admin pode editar
+        if (
+            $model->id_user !== Yii::$app->user->id &&
+            !Yii::$app->user->can('admin')
+        ) {
+            throw new \yii\web\ForbiddenHttpException('Não tem permissão para editar este perfil.');
+        }
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+            // marcar perfil como completo
+            $model->perfil_completo = 1;
+            $model->save(false);
+
+            return $this->goHome();
         }
 
         return $this->render('update', [
@@ -140,4 +167,7 @@ class PessoaController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+
+
 }

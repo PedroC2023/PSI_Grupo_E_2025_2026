@@ -22,4 +22,8 @@ $this->registerJsFile('https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.
 
         calendar.render();
     });
+<<<<<<< HEAD
 </script>
+=======
+</script>
+>>>>>>> main

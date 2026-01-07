@@ -21,16 +21,28 @@ class TipoAcaoController extends Controller
     {
         return [
             'access' => [
+<<<<<<< HEAD
                 'class' => AccessControl::class,
                 'rules' => [
                     [
                         'allow' => true,
                         'roles' => ['admin'], // só admin
+=======
+                'class' => \yii\filters\AccessControl::class,
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['manageTipoAcao'],
+>>>>>>> main
                     ],
                 ],
             ],
             'verbs' => [
+<<<<<<< HEAD
                 'class' => VerbFilter::class,
+=======
+                'class' => \yii\filters\VerbFilter::class,
+>>>>>>> main
                 'actions' => [
                     'delete' => ['POST'],
                 ],

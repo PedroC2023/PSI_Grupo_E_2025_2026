@@ -2,44 +2,50 @@
 
 namespace backend\controllers;
 
-use common\models\ParticipacaoEvento;
+use common\models\TipoTeste;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * ParticipacaoEventoController implements the CRUD actions for ParticipacaoEvento model.
+ * TipoTesteController implements the CRUD actions for TipoTeste model.
  */
-class ParticipacaoEventoController extends Controller
+class TipoTesteController extends Controller
 {
     /**
      * @inheritDoc
      */
     public function behaviors()
     {
-        return array_merge(
-            parent::behaviors(),
-            [
-                'verbs' => [
-                    'class' => VerbFilter::className(),
-                    'actions' => [
-                        'delete' => ['POST'],
+        return [
+            'access' => [
+                'class' => \yii\filters\AccessControl::class,
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['manageTipoAcao'],
                     ],
                 ],
-            ]
-        );
+            ],
+            'verbs' => [
+                'class' => \yii\filters\VerbFilter::class,
+                'actions' => [
+                    'delete' => ['POST'],
+                ],
+            ],
+        ];
     }
 
     /**
-     * Lists all ParticipacaoEvento models.
+     * Lists all TipoTeste models.
      *
      * @return string
      */
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => ParticipacaoEvento::find(),
+            'query' => TipoTeste::find(),
             /*
             'pagination' => [
                 'pageSize' => 50
@@ -58,7 +64,7 @@ class ParticipacaoEventoController extends Controller
     }
 
     /**
-     * Displays a single ParticipacaoEvento model.
+     * Displays a single TipoTeste model.
      * @param int $id ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
@@ -71,13 +77,13 @@ class ParticipacaoEventoController extends Controller
     }
 
     /**
-     * Creates a new ParticipacaoEvento model.
+     * Creates a new TipoTeste model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new ParticipacaoEvento();
+        $model = new TipoTeste();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
@@ -93,7 +99,7 @@ class ParticipacaoEventoController extends Controller
     }
 
     /**
-     * Updates an existing ParticipacaoEvento model.
+     * Updates an existing TipoTeste model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return string|\yii\web\Response
@@ -113,7 +119,7 @@ class ParticipacaoEventoController extends Controller
     }
 
     /**
-     * Deletes an existing ParticipacaoEvento model.
+     * Deletes an existing TipoTeste model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return \yii\web\Response
@@ -127,15 +133,15 @@ class ParticipacaoEventoController extends Controller
     }
 
     /**
-     * Finds the ParticipacaoEvento model based on its primary key value.
+     * Finds the TipoTeste model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return ParticipacaoEvento the loaded model
+     * @return TipoTeste the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = ParticipacaoEvento::findOne(['id' => $id])) !== null) {
+        if (($model = TipoTeste::findOne(['id' => $id])) !== null) {
             return $model;
         }
 

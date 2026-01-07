@@ -1,6 +1,6 @@
 <?php
 
-use common\models\ParticipacaoEvento;
+use common\models\TipoTeste;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
@@ -9,15 +9,15 @@ use yii\grid\GridView;
 /** @var yii\web\View $this */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Participacao Eventos';
+$this->title = 'Tipo Testes';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="participacao-evento-index">
+<div class="tipo-teste-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Participacao Evento', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Tipo Teste', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
 
@@ -26,14 +26,12 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'id_evento',
-            'id_utilizador',
-            'data_participacao',
-            'status_participacao',
+            
+            'descricao',
+            'nome',
             [
                 'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, ParticipacaoEvento $model, $key, $index, $column) {
+                'urlCreator' => function ($action, TipoTeste $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                  }
             ],

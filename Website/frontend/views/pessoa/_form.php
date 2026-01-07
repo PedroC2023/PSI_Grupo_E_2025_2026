@@ -13,10 +13,6 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(); ?>
 
     
-
-    <?= $form->field($model, 'role')->dropDownList([
-        'paciente' => 'Paciente',
-    ], ['readonly' => true]) ?>
     
     <?= $form->field($model, 'telefone')->textInput(['maxlength' => true]) ?>
 

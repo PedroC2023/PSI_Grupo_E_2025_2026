@@ -53,11 +53,14 @@ if ($isLogged && isset(Yii::$app->user->identity->avatar) && Yii::$app->user->id
                                 Meus Eventos
                             </a>
                         </li>
+<<<<<<< HEAD
                         <li class="nav-item">
                             <a class="nav-link" href="<?= Url::to(['/teste-laboratorial/meus-testes']) ?>">
                                 Meus Testes
                             </a>
                         </li>
+=======
+>>>>>>> main
                     <?php endif; ?>
 
 
@@ -67,7 +70,22 @@ if ($isLogged && isset(Yii::$app->user->identity->avatar) && Yii::$app->user->id
                             <a class="nav-link" href="<?= Url::to(['/evento/index']) ?>">
                                 Gestão de Eventos
                             </a>
+<<<<<<< HEAD
                         </li>
+=======
+                        </li>                        
+                    <?php endif; ?>
+
+                    <?php if (Yii::$app->user->can('participateEvents')): ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= Url::to(['/meus-testes/index']) ?>">
+                                Meus Testes
+                            </a>
+                        </li>
+                    <?php endif; ?>
+
+                    <?php if (Yii::$app->user->can('manageEvents')): ?>
+>>>>>>> main
                         <li class="nav-item">
                             <a class="nav-link" href="<?= Url::to(['/teste-laboratorial/index']) ?>">
                                 Testes Laboratoriais
@@ -75,6 +93,15 @@ if ($isLogged && isset(Yii::$app->user->identity->avatar) && Yii::$app->user->id
                         </li>
                     <?php endif; ?>
 
+<<<<<<< HEAD
+=======
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= Url::to(['/calendario/calendar']) ?>">
+                            Calendário
+                        </a>
+                    </li>
+
+>>>>>>> main
                 <?php endif; ?>
 
 
