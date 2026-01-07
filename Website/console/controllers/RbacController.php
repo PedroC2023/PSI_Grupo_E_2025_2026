@@ -91,11 +91,11 @@ class RbacController extends Controller
         // ======================
 
         // user_id = 1 → admin
-        $auth->assign($admin, 1);
+        $auth->assign($admin, 3);
 
         // exemplos (ajusta aos IDs reais)
-        $auth->assign($colaborador, 5);
-        $auth->assign($paciente, 6);
+        $auth->assign($colaborador, 2);
+        $auth->assign($paciente, 1);
 
         
         echo "RBAC inicializado com sucesso!\n";
