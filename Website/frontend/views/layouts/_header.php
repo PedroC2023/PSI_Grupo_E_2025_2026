@@ -70,6 +70,7 @@ if ($isLogged && isset(Yii::$app->user->identity->avatar) && Yii::$app->user->id
                             <a class="nav-link" href="<?= Url::to(['/meus-testes/index']) ?>">
                                 Meus Testes
                             </a>
+
                         </li>
                     <?php endif; ?>
 

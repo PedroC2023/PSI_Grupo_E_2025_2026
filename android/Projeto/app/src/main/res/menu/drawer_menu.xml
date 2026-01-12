@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/navEvents" android:title="Eventos" android:icon="@drawable/ic_event"/>
+    <item android:id="@+id/navCalendar" android:title="Calendário" android:icon="@drawable/ic_calendar"/>
+    <item android:id="@+id/navProfile" android:title="Perfil" android:icon="@drawable/ic_profile"/>
+    <item android:id="@+id/navContact" android:title="Contactar" android:icon="@drawable/ic_contact"/>
+</menu>
