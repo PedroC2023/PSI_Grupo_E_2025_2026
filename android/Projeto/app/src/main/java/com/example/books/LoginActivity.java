@@ -2,62 +2,45 @@ package com.example.books;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Patterns;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.Toast;
-
-import androidx.activity.EdgeToEdge;
+import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
+import com.example.books.modelo.LocalStorage;
+import com.example.books.modelo.UserProfile;
 
 public class LoginActivity extends AppCompatActivity {
 
     private EditText etEmail, etPassword;
+    private Button btnLogin;
+    private LocalStorage storage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-        setTitle("Login");
-        etEmail=findViewById(R.id.etEmail);
-        etPassword=findViewById(R.id.etPassword);
+
+        storage = new LocalStorage(this);
+
+
+        etEmail = findViewById(R.id.etEmail);
+        etPassword = findViewById(R.id.etPassword);
+        btnLogin = findViewById(R.id.btnlogin);
+
+        btnLogin.setOnClickListener(v -> doLogin());
     }
 
-    public void onClickLogin(View view) {
-        String email=etEmail.getText().toString();
-        String pass=etPassword.getText().toString();
+    private void doLogin() {
+        String email = etEmail.getText().toString().trim();
+        String pass = etPassword.getText().toString().trim();
 
-        if(!isEmailValid(email)){
-            etEmail.setError("Email inválido");
+        UserProfile user = storage.login(email, pass);
+
+        if (user == null) {
+            Toast.makeText(this, "Credenciais inválidas", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(!isPasswordValid(pass)){
-            etPassword.setError("Pass inválido");
-            return;
-        }
-        //Toast.makeText(this,"",Toast.LENGTH_LONG).show();
-        Intent intent=new Intent(this,MenuMainActivity.class);
-        intent.putExtra("EMAIL",email);
-        startActivity(intent);
+
+        startActivity(new Intent(this, MenuMainActivity.class));
         finish();
-    }
-    private boolean isEmailValid(String email){
-        if(email==null)
-            return false;
-        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
-    }
-    private boolean isPasswordValid(String pass){
-        if(pass==null)
-            return false;
-        return pass.length()>4;
     }
 }

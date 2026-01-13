@@ -4,25 +4,22 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.example.books.modelo.Event;
+import com.example.books.modelo.LocalStorage;
+import com.example.books.modelo.UserProfile;
 
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.UUID;
 
 public class CreateEventActivity extends AppCompatActivity {
 
@@ -34,17 +31,16 @@ public class CreateEventActivity extends AppCompatActivity {
     private long startTimestamp = 0L;
     private long endTimestamp = 0L;
 
-    private FirebaseFirestore db;
-    private String currentUid;
+    private LocalStorage storage;
+    private UserProfile currentUser;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
 
-        db = FirebaseFirestore.getInstance();
-        currentUid = FirebaseAuth.getInstance().getCurrentUser() != null ?
-                FirebaseAuth.getInstance().getCurrentUser().getUid() : null;
+        storage = new LocalStorage(this);
+        currentUser = storage.getLoggedUser();
 
         etTitle = findViewById(R.id.etEventTitle);
         etLocation = findViewById(R.id.etEventLocation);
@@ -59,7 +55,6 @@ public class CreateEventActivity extends AppCompatActivity {
         spinnerType = findViewById(R.id.spinnerEventType);
         btnSave = findViewById(R.id.btnSaveEvent);
 
-        // Spinner tipos de evento
         String[] tipos = new String[]{"Consulta", "Workshop", "Palestra", "Exame", "Outro"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, tipos);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -80,32 +75,33 @@ public class CreateEventActivity extends AppCompatActivity {
             if (isStart) tvStartDate.setText(dateText);
             else tvEndDate.setText(dateText);
 
-            // atualiza timestamp parcial (mantém hora se já escolhida)
             Calendar cal = Calendar.getInstance();
-            if (isStart && startTimestamp != 0L) cal.setTimeInMillis(startTimestamp);
-            if (!isStart && endTimestamp != 0L) cal.setTimeInMillis(endTimestamp);
+            cal.setTimeInMillis(isStart ? startTimestamp : endTimestamp);
             cal.set(Calendar.YEAR, year);
             cal.set(Calendar.MONTH, month);
             cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            if (isStart) startTimestamp = cal.getTimeInMillis(); else endTimestamp = cal.getTimeInMillis();
+
+            if (isStart) startTimestamp = cal.getTimeInMillis();
+            else endTimestamp = cal.getTimeInMillis();
         }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
         dpd.show();
     }
 
     private void pickTime(boolean isStart) {
         final Calendar c = Calendar.getInstance();
-        TimePickerDialog tpd = new TimePickerDialog(this, (TimePicker view, int hourOfDay, int minute) -> {
+        TimePickerDialog tpd = new TimePickerDialog(this, (view, hourOfDay, minute) -> {
             String timeText = String.format("%02d:%02d", hourOfDay, minute);
             if (isStart) tvStartTime.setText(timeText);
             else tvEndTime.setText(timeText);
 
             Calendar cal = Calendar.getInstance();
-            if (isStart && startTimestamp != 0L) cal.setTimeInMillis(startTimestamp);
-            if (!isStart && endTimestamp != 0L) cal.setTimeInMillis(endTimestamp);
+            cal.setTimeInMillis(isStart ? startTimestamp : endTimestamp);
             cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
             cal.set(Calendar.MINUTE, minute);
             cal.set(Calendar.SECOND, 0);
-            if (isStart) startTimestamp = cal.getTimeInMillis(); else endTimestamp = cal.getTimeInMillis();
+
+            if (isStart) startTimestamp = cal.getTimeInMillis();
+            else endTimestamp = cal.getTimeInMillis();
         }, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true);
         tpd.show();
     }
@@ -117,39 +113,41 @@ public class CreateEventActivity extends AppCompatActivity {
         String capacityStr = etCapacity.getText().toString().trim();
         String type = spinnerType.getSelectedItem().toString();
 
-        if (TextUtils.isEmpty(title) || startTimestamp == 0L || endTimestamp == 0L || TextUtils.isEmpty(location)) {
-            Toast.makeText(this, "Preenche título, datas e local", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(title) || TextUtils.isEmpty(location) ||
+                startTimestamp == 0L || endTimestamp == 0L) {
+            Toast.makeText(this, "Preenche todos os campos", Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (startTimestamp >= endTimestamp) {
-            Toast.makeText(this, "Data inicial deve ser antes da data final", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "A data inicial deve ser antes da final", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        int capacity = 0;
+        int capacity;
         try {
             capacity = Integer.parseInt(capacityStr);
-        } catch (NumberFormatException e) {
+        } catch (Exception e) {
             capacity = 0;
         }
 
-        Map<String, Object> event = new HashMap<>();
-        event.put("title", title);
-        event.put("description", description);
-        event.put("startTimestamp", startTimestamp);
-        event.put("endTimestamp", endTimestamp);
-        event.put("location", location);
-        event.put("type", type);
-        event.put("capacity", capacity);
-        event.put("createdBy", currentUid != null ? currentUid : "unknown");
+        String eventId = UUID.randomUUID().toString();
 
-        // grava no Firestore
-        db.collection("events").add(event).addOnSuccessListener(docRef -> {
-            Toast.makeText(this, "Evento criado", Toast.LENGTH_SHORT).show();
-            finish();
-        }).addOnFailureListener(e -> {
-            Toast.makeText(this, "Erro ao criar evento: " + e.getMessage(), Toast.LENGTH_LONG).show();
-        });
+        Event event = new Event(
+                eventId,
+                title,
+                description,
+                startTimestamp,
+                endTimestamp,
+                location,
+                type,
+                capacity,
+                currentUser != null ? currentUser.getUid() : "unknown"
+        );
+
+        storage.addEvent(event);
+
+        Toast.makeText(this, "Evento criado com sucesso!", Toast.LENGTH_SHORT).show();
+        finish();
     }
 }

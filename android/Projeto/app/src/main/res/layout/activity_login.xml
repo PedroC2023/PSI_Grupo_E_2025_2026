@@ -47,8 +47,18 @@
         android:id="@+id/btnlogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Login"
-        android:onClick="onClickLogin"/>
+        android:text="Login">
+
+    </Button>
+
+        <Button
+            android:id="@+id/btnGoSignup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Criar conta"
+            android:layout_marginTop="8dp"/>
+
+
     </LinearLayout>
 
 
