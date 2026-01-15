@@ -1,25 +1,4 @@
 <?php
-<<<<<<< HEAD
-
-use yii\helpers\Html;
-
-/** @var yii\web\View $this */
-/** @var common\models\TesteLaboratorial $model */
-
-$this->title = 'Create Teste Laboratorial';
-$this->params['breadcrumbs'][] = ['label' => 'Teste Laboratorials', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
-?>
-<div class="teste-laboratorial-create">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <?= $this->render('_form', [
-        'model' => $model,
-    ]) ?>
-
-</div>
-=======
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
@@ -42,4 +21,3 @@ use yii\helpers\Html;
 <?= Html::submitButton('Criar Teste', ['class' => 'btn btn-success']) ?>
 
 <?php ActiveForm::end(); ?>
->>>>>>> main

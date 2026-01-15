@@ -13,10 +13,7 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'descricao')->textInput(['maxlength' => true]) ?>
-<<<<<<< HEAD
-=======
     <?= $form->field($model, 'nome')->textInput(['maxlength' => true]) ?>
->>>>>>> main
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

@@ -79,8 +79,6 @@ AdminLteAsset::register($this);
                         </a>
                     </li>
 
-<<<<<<< HEAD
-=======
                     <li class="nav-item">
                         <a href="/PSI_Grupo_E_2025_2026/Website/backend/web/tipo-teste/index" class="nav-link">
                             <p>Tipo de Testes</p>
@@ -92,7 +90,6 @@ AdminLteAsset::register($this);
                         </a>
                     </li>
 
->>>>>>> main
 
                 </ul>
             </nav>

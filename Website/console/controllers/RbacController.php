@@ -28,8 +28,6 @@ class RbacController extends Controller
         $manageLaboratorios = $auth->createPermission('manageLaboratorios');
         $auth->add($manageLaboratorios);
 
-<<<<<<< HEAD
-=======
         $manageTipoAcao = $auth->createPermission('manageTipoAcao');
         $manageTipoAcao->description = 'Gerir tipos de ação';
         $auth->add($manageTipoAcao);
@@ -51,7 +49,6 @@ class RbacController extends Controller
 
 
 
->>>>>>> main
         // ROLES
         $admin = $auth->createRole('admin');
         $auth->add($admin);
@@ -60,28 +57,21 @@ class RbacController extends Controller
         $auth->addChild($admin, $viewEvents);
         $auth->addChild($admin, $participateEvents);
         $auth->addChild($admin, $manageLaboratorios);
-<<<<<<< HEAD
-=======
         $auth->addChild($admin, $manageTipoAcao);        
         $auth->addChild($admin, $manageTestes);
         $auth->addChild($admin, $viewMyTestes);
         $auth->addChild($admin, $viewMyParticipations);
 
->>>>>>> main
 
         $colaborador = $auth->createRole('colaborador');
         $auth->add($colaborador);
         $auth->addChild($colaborador, $manageEvents);
         $auth->addChild($colaborador, $viewEvents);
-<<<<<<< HEAD
-        $auth->addChild($colaborador, $participateEvents);
-=======
         // $auth->addChild($colaborador, $participateEvents);
         $auth->addChild($colaborador, $createAcaoResposta);
         $auth->addChild($colaborador, $viewAcaoResposta);
         $auth->addChild($colaborador, $manageTestes);
         $auth->addChild($colaborador, $viewMyTestes);
->>>>>>> main
         // opcional:
         // $auth->addChild($colaborador, $manageLaboratorios);
 
@@ -96,8 +86,6 @@ class RbacController extends Controller
         $auth->add($visitante);
         $auth->addChild($visitante, $viewEvents);
 
-<<<<<<< HEAD
-=======
         // ======================
         // ATRIBUIR ROLES A UTILIZADORES
         // ======================
@@ -110,7 +98,6 @@ class RbacController extends Controller
         $auth->assign($paciente, 1);
 
         
->>>>>>> main
         echo "RBAC inicializado com sucesso!\n";
     }
 }
