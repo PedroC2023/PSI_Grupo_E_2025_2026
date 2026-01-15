@@ -73,9 +73,10 @@ class ParticipacaoController extends Controller
     public function actionInscrever($id)
     {
         $userId = Yii::$app->user->id;
+        $isPaciente = Yii::$app->user->isPaciente();
 
         $pessoa = Pessoa::findOne(['id_user' => $userId]);
-        if (!$pessoa || $pessoa->role !== Pessoa::ROLE_PACIENTE) {
+        if (!$pessoa || !$isPaciente) {
             throw new ForbiddenHttpException('Apenas pacientes podem inscrever-se.');
         }
 

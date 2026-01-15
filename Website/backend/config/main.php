@@ -23,7 +23,7 @@ return [
         'request' => [
             'csrfParam' => '_csrf-backend',
             'cookieValidationKey' => 'algo',
-            'enableCsrfValidation' => true,
+            'enableCsrfValidation' => false, // Desabilitar CSRF para APIs REST
         ],
         'user' => [
             'identityClass' => 'common\models\User',
@@ -55,7 +55,20 @@ return [
                 [
                     'class' => 'yii\rest\UrlRule','controller' => 'api/user',
                     'pluralize' => false
-                ],                
+                ],
+                // EVENTO (REST)
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/evento',
+                    'pluralize' => false
+                ],
+
+                // MASTER / DETAIL
+                'GET api/evento/<id:\d+>/participacoes' =>
+                    'api/participacao-evento/index',
+
+                'POST api/evento/<id:\d+>/participacoes' =>
+                    'api/participacao-evento/create',                
 //  <--------  usar ?access-token=qdXut46xKW-waAXTe-sLBgxfSAKex1W3 para testar - POST PUT DELETE GET - URLs  ---------->
                 // Regra para PratoController com extraPatterns                
             ],
