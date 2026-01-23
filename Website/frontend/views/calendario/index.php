@@ -1,5 +1,9 @@
 <?php
+// language: php
 use yii\helpers\Html;
+
+// Ensure $eventos exists (avoid "Undefined variable" notice)
+$eventos = isset($eventos) ? $eventos : [];
 ?>
 
 <div style="width:300px; position:relative;">
@@ -54,7 +58,9 @@ use yii\helpers\Html;
 
             $eventoEncontrado = null;
             foreach ($eventos as $evento) {
-                if (date('j', strtotime($evento->data_inicio)) == $day) {
+                // support both arrays and objects
+                $dataInicio = is_array($evento) ? ($evento['data_inicio'] ?? null) : ($evento->data_inicio ?? null);
+                if ($dataInicio && date('j', strtotime($dataInicio)) == $day) {
                     $eventoEncontrado = $evento;
                     break;
                 }
@@ -63,11 +69,18 @@ use yii\helpers\Html;
             echo "<td>$day";
 
             if ($eventoEncontrado) {
-                echo "<br>" . Html::a(
-                                'Evento',
-                                ['calendario/view', 'id' => $eventoEncontrado->id],
-                                ['class' => 'badge bg-primary']
-                        );
+                $id = is_array($eventoEncontrado) ? ($eventoEncontrado['id'] ?? null) : ($eventoEncontrado->id ?? null);
+                $title = is_array($eventoEncontrado) ? ($eventoEncontrado['titulo'] ?? 'Evento') : ($eventoEncontrado->titulo ?? 'Evento');
+
+                if ($id) {
+                    echo "<br>" . Html::a(
+                                    Html::encode($title),
+                                    ['/evento/view', 'id' => $id],
+                                    ['class' => 'badge bg-primary']
+                            );
+                } else {
+                    echo "<br>" . Html::tag('span', Html::encode($title), ['class' => 'badge bg-secondary']);
+                }
             }
 
             echo "</td>";

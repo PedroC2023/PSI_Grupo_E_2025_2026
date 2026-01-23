@@ -70,6 +70,7 @@ if ($isLogged && isset(Yii::$app->user->identity->avatar) && Yii::$app->user->id
                             <a class="nav-link" href="<?= Url::to(['/meus-testes/index']) ?>">
                                 Meus Testes
                             </a>
+
                         </li>
                     <?php endif; ?>
 
@@ -82,7 +83,7 @@ if ($isLogged && isset(Yii::$app->user->identity->avatar) && Yii::$app->user->id
                     <?php endif; ?>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= Url::to(['/calendario/calendar']) ?>">
+                        <a class="nav-link" href="<?= Url::to(['/calendario']) ?>">
                             Calendário
                         </a>
                     </li>
